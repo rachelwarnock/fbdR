@@ -1,6 +1,6 @@
 
 #' @export
-recountGamma<-function(frs){
+recount.gamma<-function(frs){
   #frs<-fossilRanges
   frs<-frs
 
@@ -28,7 +28,7 @@ recountGamma<-function(frs){
 }
 
 #' @export
-recountExtant<-function(frs){
+recount.extant<-function(frs){
   #frs<-fossilRanges
   frs<-frs
 
@@ -48,7 +48,7 @@ recountExtant<-function(frs){
 #### probability functions
 
 #' @export
-fbdProbability<-function(b,d,s,k,rho=1,frs){
+fbd.probability<-function(frs,b,d,s,k,rho=1){
   frs<-frs
   lambda<<-b
   mu<<-d
