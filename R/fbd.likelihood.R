@@ -105,7 +105,7 @@ est.bd<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d){
   upper.b<-upper.b
   upper.d<-upper.d
 
-  est<-optim(c(b,d),fbd.likelihood.est.bd,s=s,k=k,frs=frs,control=list(fnscale=-1,maxit=500),
+  est<-optim(c(b,d),fbd.likelihood.est.bd,s=s,k=k,frs=frs,control=list(fnscale=-1,maxit=500), # fnscale=-1 tells the function to maximise
          method="L-BFGS-B", # this method allows bounds on parameters
          lower=c(lower.b,lower.d),
          upper=c(upper.b,upper.d)
@@ -183,7 +183,7 @@ est.s<-function(b,d,s,k,frs,lower.s,upper.s){
   #eof
 }
 
-
-#if(est$convergence != 0)
+# zero indicates successful covergence
+# est$convergence == 0
 
 
