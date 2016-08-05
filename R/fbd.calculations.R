@@ -48,13 +48,14 @@ recount.extant<-function(frs){
 #### probability functions
 
 #' @export
-fbd.probability<-function(frs,b,d,s,k,rho=1){
+fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F){
   frs<-frs
   lambda<<-b
   mu<<-d
   psi<<-s
   rho<<-rho
   numFossils<-k
+  complete<-complete
 
   ot = max(frs$bi) # define the origin
   extinctLineages = length(frs$extant) - sum(frs$extant)
@@ -63,19 +64,12 @@ fbd.probability<-function(frs,b,d,s,k,rho=1){
   pr = pr + extinctLineages*log(mu)
   pr = pr - log(lambda * (1 -fbdPfxn(ot) ) )
 
-  #   for (fr in 1:length(frs$bi)) {
-  #     gamma=frs$gamma[fr]
-  #     bi=frs$bi[fr]
-  #     di=frs$di[fr]
-  #
-  #     rangePr = log(lambda*gamma) + fbdQTildaFxnLog(bi) - fbdQTildaFxnLog(di)
-  #
-  #     pr = pr + rangePr
-  #   }
-
-  # this makes it a bit faster
-  rp=sum(unlist(lapply(1:length(frs$bi),function(x){ rangePr(frs$gamma[x],frs$bi[x],frs$di[x]) })))
-
+  # for complete sampling (b_i = o_i)
+  if(complete)
+    rp=sum(unlist(lapply(1:length(frs$bi),function(x){ rangePrComplete(frs$gamma[x],frs$bi[x],frs$di[x]) })))
+  else
+    rp=sum(unlist(lapply(1:length(frs$bi),function(x){ rangePr(frs$gamma[x],frs$bi[x],frs$di[x],frs$oi[x]) })))
+  
   pr = pr + rp
   return(pr)
 
@@ -146,7 +140,11 @@ fbdQTildaFxnLog<-function(t){
 
 }
 
-rangePr<-function(gamma,bi,di){
+fbdQfxnLog<-function(t){
+  return(0)
+}
+
+rangePrComplete<-function(gamma,bi,di){
   bi<-bi
   di<-di
   gamma<-gamma
@@ -157,4 +155,14 @@ rangePr<-function(gamma,bi,di){
 
 }
 
-
+rangePr<-function(gamma,bi,di,oi){
+  bi<-bi
+  di<-di
+  oi<-oi
+  gamma<-gamma
+  
+  rp = log(lambda*gamma) + fbdQfxnLog(oi) - fbdQfxnLog(di) + fbdQTildaFxnLog(oi) - fbdQTildaFxnLog(di)
+  
+  return(rp)
+  
+}
