@@ -1,6 +1,6 @@
 
 #' @export
-fbd.likelihood.est<-function(b,d,s,k,frs,est.b=T,est.d=T,est.s=F,lower.b=0.001,lower.d=0.001,lower.s=0.001,upper.b=10,upper.d=10,upper.s=100){
+fbd.likelihood.est<-function(b,d,s,k,frs,est.b=T,est.d=T,est.s=F,lower.b=0.001,lower.d=0.001,lower.s=0.001,upper.b=10,upper.d=10,upper.s=100,complete=F){
   b<-b # fixed or starting value
   d<-d # fixed or starting value
   s<-s # fixed or starting value
@@ -15,11 +15,12 @@ fbd.likelihood.est<-function(b,d,s,k,frs,est.b=T,est.d=T,est.s=F,lower.b=0.001,l
   upper.b<-upper.b
   upper.d<-upper.d
   upper.s<-upper.s
+  complete<-complete
 
   # estimate b, d and s
   if(est.b & est.d & est.s) {
 
-    est<-est.bds(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,lower.s,upper.s)
+    est<-est.bds(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,lower.s,upper.s,complete)
     return(list(lambda=est$par[1],mu=est$par[2],psi=est$par[3],likelihood=est$value))
 
   }
@@ -58,7 +59,7 @@ fbd.likelihood.est<-function(b,d,s,k,frs,est.b=T,est.d=T,est.s=F,lower.b=0.001,l
 
 # function to co-estimate lambda, mu, psi
 
-est.bds<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,lower.s,upper.s){
+est.bds<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,lower.s,upper.s,complete){
   b<-b # starting value
   d<-d # starting value
   s<-s # starting value
@@ -70,8 +71,9 @@ est.bds<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,lower.s,upper.s){
   upper.d<-upper.d
   lower.s<-lower.s
   upper.s<-upper.s
+  complete<-complete
 
-  est<-optim(c(b,d,s),fbd.likelihood.est.bds,k=k,frs=frs,control=list(fnscale=-1,maxit=500),
+  est<-optim(c(b,d,s),fbd.likelihood.est.bds,k=k,frs=frs,complete=complete,control=list(fnscale=-1,maxit=500),
              method="L-BFGS-B", # this method allows bounds on parameters
              lower=c(lower.b,lower.d,lower.s),
              upper=c(upper.b,upper.d,upper.s)
@@ -80,14 +82,15 @@ est.bds<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,lower.s,upper.s){
   #eof
 }
 
-fbd.likelihood.est.bds<-function(p,k,frs){
+fbd.likelihood.est.bds<-function(p,k,frs,complete){
   b=p[1]
   d=p[2]
   s=p[3]
   k<-k
   frs<-frg
+  complete<-complete
 
-  lk=fbd.probability(frs,b,d,s,k,rho=1)
+  lk=fbd.probability(frs,b,d,s,k,rho=1,complete=complete)
   return(lk)
   #eof
 }
