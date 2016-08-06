@@ -173,7 +173,7 @@ rangePr<-function(gamma,bi,di,oi){
   oi<-oi
   gamma<-gamma
 
-  rp = log(lambda*gamma) + fbdQTildaFxnLog(oi) - fbdQTildaFxnLog(di) + fbdQfxnLog(oi) - fbdQfxnLog(di)
+  rp = log(lambda*gamma) + fbdQTildaFxnLog(oi) - fbdQTildaFxnLog(di) + fbdQfxnLog(bi) - fbdQfxnLog(oi)
 
   return(rp)
 
