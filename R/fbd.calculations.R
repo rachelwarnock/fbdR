@@ -69,7 +69,7 @@ fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F){
     rp=sum(unlist(lapply(1:length(frs$bi),function(x){ rangePrComplete(frs$gamma[x],frs$bi[x],frs$di[x]) })))
   else
     rp=sum(unlist(lapply(1:length(frs$bi),function(x){ rangePr(frs$gamma[x],frs$bi[x],frs$di[x],frs$oi[x]) })))
-  
+
   pr = pr + rp
   return(pr)
 
@@ -141,7 +141,19 @@ fbdQTildaFxnLog<-function(t){
 }
 
 fbdQfxnLog<-function(t){
-  return(0)
+  t<-t
+
+  c1 = fbdC1fxn()
+  c2 = fbdC2fxn()
+
+  #log(4 * exp (-c1*t) / (((exp(-c1*t) * (1-c2)) + (1+c2))^2))
+
+  f1 = log(4) + (-c1 * t)
+  f2 = 2 * (log( (exp(-c1*t) * (1-c2)) + (1+c2) ))
+
+  v = f1 - f2;
+
+  return(v)
 }
 
 rangePrComplete<-function(gamma,bi,di){
@@ -160,9 +172,13 @@ rangePr<-function(gamma,bi,di,oi){
   di<-di
   oi<-oi
   gamma<-gamma
-  
-  rp = log(lambda*gamma) + fbdQfxnLog(oi) - fbdQfxnLog(di) + fbdQTildaFxnLog(oi) - fbdQTildaFxnLog(di)
-  
+
+  rp = log(lambda*gamma) + fbdQTildaFxnLog(oi) - fbdQTildaFxnLog(di) + fbdQfxnLog(oi) - fbdQfxnLog(di)
+
   return(rp)
-  
+
 }
+
+
+
+
