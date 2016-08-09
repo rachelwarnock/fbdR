@@ -179,6 +179,18 @@ rangePr<-function(gamma,bi,di,oi){
 
 }
 
+qt_heath<-function(t){
+  t<-t
 
+  c1=fbdC1fxn()
+  c2=fbdC2fxn()
 
+  v1 = 2 * ( 1 - c2^2 )
+  v2 = exp(-c1 * t) * ((1 - c2)^2)
+  v3 = exp(c1 * t) * ((1 + c2)^2)
+
+  v = v1 + v2 + v3
+
+  return(v)
+}
 
