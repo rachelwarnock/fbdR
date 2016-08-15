@@ -87,7 +87,7 @@ fbd.likelihood.est.bds<-function(p,k,frs,complete){
   d=p[2]
   s=p[3]
   k<-k
-  frs<-frg
+  frs<-frs
   complete<-complete
 
   lk=fbd.probability(frs,b,d,s,k,rho=1,complete=complete)
@@ -122,7 +122,7 @@ fbd.likelihood.est.bd<-function(p,s,k,frs){
   d=p[2]
   s<-s
   k<-k
-  frs<-frg
+  frs<-frs
 
   lk=fbd.probability(frs,b,d,s,k,rho=1)
   return(lk)
