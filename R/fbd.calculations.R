@@ -115,7 +115,8 @@ fbdPfxn<-function(t){
   c1 = fbdC1fxn()
   c2 = fbdC2fxn()
 
-  p = 1 + ( (-(lambda-mu-psi) +  (c1 * ( ( exp(-c1*t)*(1-c2)-(1+c2) ) / ( exp(-c1*t)*(1-c2)+(1+c2) ) ) ) ) / (2*lambda) )
+  # p = 1 + ( (-(lambda-mu-psi) +  (c1 * ( ( exp(-c1*t)*(1-c2)-(1+c2) ) / ( exp(-c1*t)*(1-c2)+(1+c2) ) ) ) ) / (2*lambda) )
+  p = ( ((lambda+mu+psi) +  (c1 * ( ( exp(-c1*t)*(1-c2)-(1+c2) ) / ( exp(-c1*t)*(1-c2)+(1+c2) ) ) ) ) / (2*lambda) )
 
   return(p)
 }
@@ -194,3 +195,5 @@ qt_heath<-function(t){
   return(v)
 }
 
+# q=exp(fbdQfxnLog(told))/exp(fbdQfxnLog(tyoung)) - exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung))
+# exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung)) -exp(-(told-tyoung) * (lambda+mu+psi) )
