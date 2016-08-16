@@ -97,7 +97,7 @@ fbd.likelihood.est.bds<-function(p,k,frs,complete){
 
 # functions to co-estimate lambda & mu
 
-est.bd<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d){
+est.bd<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,complete){
   b<-b # starting value
   d<-d # starting value
   s<-s # fixed
