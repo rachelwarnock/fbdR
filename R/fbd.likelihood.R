@@ -27,7 +27,7 @@ fbd.likelihood.est<-function(b,d,s,k,frs,est.b=T,est.d=T,est.s=F,lower.b=0.001,l
   # estimate b and d only, fix s
   else if (est.b & est.d){
 
-    est<-est.bd(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d)
+    est<-est.bd(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d,complete)
     return(list(lambda=est$par[1],mu=est$par[2],likelihood=est$value))
 
   }
@@ -107,8 +107,9 @@ est.bd<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d){
   lower.d<-lower.d
   upper.b<-upper.b
   upper.d<-upper.d
+  complete<-complete
 
-  est<-optim(c(b,d),fbd.likelihood.est.bd,s=s,k=k,frs=frs,control=list(fnscale=-1,maxit=500), # fnscale=-1 tells the function to maximise
+  est<-optim(c(b,d),fbd.likelihood.est.bd,s=s,k=k,frs=frs,complete=complete,control=list(fnscale=-1,maxit=500), # fnscale=-1 tells the function to maximise
          method="L-BFGS-B", # this method allows bounds on parameters
          lower=c(lower.b,lower.d),
          upper=c(upper.b,upper.d)
@@ -117,14 +118,15 @@ est.bd<-function(b,d,s,k,frs,lower.b,upper.b,lower.d,upper.d){
   #eof
 }
 
-fbd.likelihood.est.bd<-function(p,s,k,frs){
+fbd.likelihood.est.bd<-function(p,s,k,frs,complete){
   b=p[1]
   d=p[2]
   s<-s
   k<-k
   frs<-frs
+  complete<-complete
 
-  lk=fbd.probability(frs,b,d,s,k,rho=1)
+  lk=fbd.probability(frs,b,d,s,k,rho=1,complete=complete)
   return(lk)
   #eof
 }
