@@ -62,7 +62,7 @@ fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F){
 
   pr = numFossils*log(psi)
   pr = pr + extinctLineages*log(mu)
-  pr = pr - log(lambda * (1 -fbdPfxn(ot) ) )
+  pr = pr - log(lambda * (1 - fbdPfxn(ot) ) )
 
   # for complete sampling (b_i = o_i)
   if(complete)
@@ -116,7 +116,8 @@ fbdPfxn<-function(t){
   c2 = fbdC2fxn()
 
   # p = 1 + ( (-(lambda-mu-psi) +  (c1 * ( ( exp(-c1*t)*(1-c2)-(1+c2) ) / ( exp(-c1*t)*(1-c2)+(1+c2) ) ) ) ) / (2*lambda) )
-  p = ( ((lambda+mu+psi) +  (c1 * ( ( exp(-c1*t)*(1-c2)-(1+c2) ) / ( exp(-c1*t)*(1-c2)+(1+c2) ) ) ) ) / (2*lambda) )
+  # p = ( ((lambda+mu+psi) +  (c1 * ( ( exp(-c1*t)*(1-c2)-(1+c2) ) / ( exp(-c1*t)*(1-c2)+(1+c2) ) ) ) ) / (2*lambda) )
+  p = ( ((lambda+mu+psi) +  (c1 * ( ( exp(-c1*t)*(1-c2)/(1+c2) - 1 ) / ( exp(-c1*t)*(1-c2)/(1+c2) + 1 ) ) ) ) / (2*lambda) )
 
   return(p)
 }
@@ -196,4 +197,4 @@ qt_heath<-function(t){
 }
 
 # q=exp(fbdQfxnLog(told))/exp(fbdQfxnLog(tyoung)) - exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung))
-# exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung)) -exp(-(told-tyoung) * (lambda+mu+psi) )
+# exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung)) - exp(-(told-tyoung) * (lambda+mu+psi) )
