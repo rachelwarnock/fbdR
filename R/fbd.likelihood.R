@@ -91,6 +91,7 @@ fbd.likelihood.est.bds<-function(p,k,frs,complete){
   complete<-complete
 
   lk=fbd.probability(frs,b,d,s,k,rho=1,complete=complete)
+  #lk=asNumeric(lk)
   return(lk)
   #eof
 }

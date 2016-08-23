@@ -48,14 +48,24 @@ recount.extant<-function(frs){
 #### probability functions
 
 #' @export
-fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F){
+fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F,mpfr=F){
   frs<-frs
-  lambda<<-b
-  mu<<-d
-  psi<<-s
-  rho<<-rho
   numFossils<-k
   complete<-complete
+  mpfr<-mpfr
+  bits = 128
+  if(mpfr){
+    lambda<<-mpfr(b, bits)
+    mu<<-mpfr(d, bits)
+    psi<<-mpfr(s, bits)
+    rho<<-mpfr(rho, bits)
+  }
+  else{
+    lambda<<-b
+    mu<<-d
+    psi<<-s
+    rho<<-rho
+  }
 
   ot = max(frs$bi) # define the origin
   extinctLineages = length(frs$extant) - sum(frs$extant)
@@ -65,10 +75,19 @@ fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F){
   pr = pr - log(lambda * (1 - fbdPfxn(ot) ) )
 
   # for complete sampling (b_i = o_i)
-  if(complete)
-    rp=sum(unlist(lapply(1:length(frs$bi),function(x){ rangePrComplete(frs$gamma[x],frs$bi[x],frs$di[x]) })))
-  else
-    rp=sum(unlist(lapply(1:length(frs$bi),function(x){ rangePr(frs$gamma[x],frs$bi[x],frs$di[x],frs$oi[x]) })))
+  if(!mpfr){
+    if(complete)
+      rp = sum(unlist(lapply(1:length(frs$bi),function(x){ rangePrComplete(frs$gamma[x],frs$bi[x],frs$di[x]) })))
+    else
+      rp = sum(unlist(lapply(1:length(frs$bi),function(x){ rangePr(frs$gamma[x],frs$bi[x],frs$di[x],frs$oi[x]) })))
+  }
+  else {
+    rp.all = lapply(1:length(frs$bi),function(x){ rangePr(frs$gamma[x],frs$bi[x],frs$di[x],frs$oi[x]) })
+    rp = 0
+    for(i in 1:length(rp.all)){
+      rp = rp + rp.all[[i]]
+    }
+  }
 
   pr = pr + rp
   return(pr)
