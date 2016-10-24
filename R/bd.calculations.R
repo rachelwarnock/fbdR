@@ -37,18 +37,28 @@ bd.probability.range<-function(frs,b,d){
 #' @param d Rate of extinction (branch termination)
 #' @param rho Extant species sampling
 #' @return Log likelihood
-bd.probability.extant<-function(tree,b,d,rho=1){
+bd.probability.extant<-function(tree,b,d,rho=1,mpfr=F){
   tree<-tree
-  lambda<<-b
-  mu<<-d
-  rho<<-rho
+  bits = 128
+  if(mpfr){
+    lambda<<-mpfr(b, bits)
+    mu<<-mpfr(d, bits)
+    rho<<-mpfr(rho, bits)
+  }
+  else{
+    lambda<<-b
+    mu<<-d
+    rho<<-rho
+  }
+
+  tree<-geiger::drop.extinct(tree)
 
   # calculate node ages
   node.ages = TreeSim::getx(tree)
 
   # take care of the origin
   origin = max(node.ages)+tree$root.edge
-  ll = bdP1(origin) - log(1 - bdP0(origin))
+  ll = bdP1Log(origin) - log(1 - bdP0(origin))
 
   for(i in node.ages){
     ll = ll + log(lambda) + bdP1Log(i)
@@ -77,7 +87,7 @@ bdP1Log<-function(t){
   return(p2)
 }
 
-# bdP0 function Stadler 2010, 322
+# bdP0 function Stadler 2010, 322 or Phat in Heath et al. 2014
 bdP0<-function(t){
   t<-t
 
@@ -86,6 +96,7 @@ bdP0<-function(t){
   return(p)
 }
 
+# this doesn't work if 1-(b-d) < 0
 bdP0Log<-function(t){
   t<-t
 
@@ -93,5 +104,4 @@ bdP0Log<-function(t){
 
   return(p)
 }
-
 
