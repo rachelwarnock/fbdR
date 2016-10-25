@@ -1,4 +1,5 @@
 
+#' @export
 est.bd.ranges<-function(b,d,frs,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=10){
   b<-b # starting value
   d<-d # starting value
@@ -29,6 +30,7 @@ bd.likelihood.est.ranges<-function(p,frs){
 
 ########
 
+#' @export
 est.bd.extant<-function(b,d,tree,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=10){
   b<-b # starting value
   d<-d # starting value
