@@ -37,6 +37,7 @@ bd.probability.range<-function(frs,b,d){
 #' @param d Rate of extinction (branch termination)
 #' @param rho Extant species sampling
 #' @return Log likelihood
+#' @export
 bd.probability.extant<-function(tree,b,d,rho=1,mpfr=F){
   tree<-tree
   bits = 128
