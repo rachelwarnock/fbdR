@@ -10,19 +10,28 @@ est.bd.ranges<-function(b,d,frs,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=1
   lower.d<-lower.d
   upper.b<-upper.b
   upper.d<-upper.d
+  method =  1 # 1: "Nelder-Mead" 2: "L-BFGS-B"
 
-  est<-optim(c(b,d),bd.likelihood.est.ranges,frs=frs,control=list(fnscale=-1,maxit=500), # fnscale=-1 tells the function to maximise
-             method="L-BFGS-B", # this method allows bounds on parameters
-             lower=c(lower.b,lower.d),
-             upper=c(upper.b,upper.d)
-  )
+  if(method==2){
+    est<-optim(c(b,d),bd.likelihood.est.ranges,frs=frs,control=list(fnscale=-1,maxit=1000), # fnscale=-1 tells the function to maximise
+               method="L-BFGS-B", # this method allows bounds on parameters
+               lower=c(lower.b,lower.d),
+               upper=c(upper.b,upper.d)
+    )
+  }
+  else{
+    est<-optim(c(b,d),bd.likelihood.est.ranges,frs=frs,control=list(fnscale=-1,maxit=1000))
+  }
+
+  est$par = abs(est$par)
+
   return(est)
   #eof
 }
 
 bd.likelihood.est.ranges<-function(p,frs){
-  b=p[1]
-  d=p[2]
+  b=abs(p[1])
+  d=abs(p[2])
   frs<-frs
 
   lk=bd.probability.range(frs,b,d)
@@ -41,23 +50,32 @@ est.bd.extant<-function(b,d,tree,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=
   lower.d<-lower.d
   upper.b<-upper.b
   upper.d<-upper.d
+  method =  1 # 1: "Nelder-Mead" 2: "L-BFGS-B"
 
-  est<-optim(c(b,d),bd.likelihood.est.extant,tree=tree,control=list(fnscale=-1,maxit=10000), # fnscale=-1 tells the function to maximise
+  if(method==2){
+    est<-optim(c(b,d),bd.likelihood.est.extant,tree=tree,control=list(fnscale=-1,maxit=1000), # fnscale=-1 tells the function to maximise
              method="L-BFGS-B", # this method allows bounds on parameters
              lower=c(lower.b,lower.d),
              upper=c(upper.b,upper.d)
-  )
+             )
+  }
+  else{
+    est<-optim(c(b,d),bd.likelihood.est.extant,tree=tree,control=list(fnscale=-1,maxit=1000))
+  }
+
+  est$par = abs(est$par)
+
   return(est)
   #eof
 }
 
 bd.likelihood.est.extant<-function(p,tree){
-  b=p[1]
-  d=p[2]
+  b=abs(p[1])
+  d=abs(p[2])
   tree<-tree
 
   if((b < d) || (b == d))
-    return(-10^100)
+   return(-10^100)
 
   lk=bd.probability.extant(tree,b,d)
   return(lk)
@@ -65,31 +83,31 @@ bd.likelihood.est.extant<-function(p,tree){
 }
 
 ######## combined estimates
+
 #' @export
-est.bd.combined<-function(b,d,b.star,d.star,tree,frs,
-                         lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=10,
-                         lower.b.star=0.001,upper.b.star=10,lower.d.star=0.001,upper.d.star=10,
-                         constrained=FALSE){
+est.bd.combined<-function(tree,frs,b=0.3,d=0.1,b.star=1,d.star=0.1,nd=0.1,constrained=FALSE){
   b<-b # starting value
   d<-d # starting value
   b.star<-b.star # starting value
   d.star<-d.star # starting value
+  nd<-nd # starting value
 
-  est<-optim(c(b,d,b.star,d.star),bd.likelihood.est.combined,tree=tree,frs=frs,control=list(fnscale=-1,maxit=20000), # fnscale=-1 tells the function to maximise
-             method="L-BFGS-B", # this method allows bounds on parameters
-             lower=c(lower.b,lower.d,lower.b.star,lower.d.star),
-             upper=c(upper.b,upper.d,upper.b.star,upper.d.star)
-  )
+  if(!constrained)
+    est<-optim(c(b,d,b.star,d.star),bd.likelihood.est.combined,tree=tree,frs=frs,control=list(fnscale=-1,maxit=1000)) # fnscale=-1 tells the function to maximise
+  else
+    est<-optim(c(b,b.star,nd),bd.likelihood.est.combined.const,tree=tree,frs=frs,control=list(fnscale=-1,maxit=1000)) # fnscale=-1 tells the function to maximise
+
+  est$par = abs(est$par)
 
   return(est)
   # eof
 }
 
 bd.likelihood.est.combined<-function(p,tree,frs){
-  b=p[1]
-  d=p[2]
-  b.star=p[3]
-  d.star=p[4]
+  b=abs(p[1])
+  d=abs(p[2])
+  b.star=abs(p[3])
+  d.star=abs(p[4])
   tree<-tree
   frs<-frs
 
@@ -100,3 +118,23 @@ bd.likelihood.est.combined<-function(p,tree,frs){
 
   return(lk)
 }
+
+bd.likelihood.est.combined.const<-function(p,tree,frs){
+  b=abs(p[1])
+  b.star=abs(p[2])
+  nd=abs(p[3])
+  tree<-tree
+  frs<-frs
+
+  if(b > b.star)
+    return(-10^100)
+
+  d = b - nd
+  d.star = b.star - nd
+
+  lk = bd.probability.range(frs,b.star,d.star) + bd.probability.extant(tree,b,d)
+
+  return(lk)
+}
+
+
