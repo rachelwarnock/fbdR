@@ -2,6 +2,7 @@
 
 export(bd.probability.extant)
 export(bd.probability.range)
+export(est.bd.combined)
 export(est.bd.extant)
 export(est.bd.ranges)
 export(fbd.likelihood.est)
