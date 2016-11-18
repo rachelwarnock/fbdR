@@ -129,6 +129,9 @@ bd.likelihood.est.combined.const<-function(p,tree,frs){
   if(b > b.star)
     return(-10^100)
 
+  if(nd >= b || nd >= b.star)
+    return(-10^100)
+
   d = b - nd
   d.star = b.star - nd
 
