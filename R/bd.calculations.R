@@ -9,16 +9,21 @@
 #' @param d Rate of extinction
 #' @return Log likelihood
 #' @export
-bd.probability.range<-function(frs,b,d){
+bd.probability.range<-function(frs,b,d,crown=FALSE){
   frs<-frs
   b<-b
   d<-d
+  crown<-crown # condition on the crown, instead of the origin
 
   B = 0 # total number of speciation events # int
   D = 0 # total number of extinction events # int
   S = 0 # total lineage duration
 
-  B = length(frs$sp)-1 # note the origin is not a speciation event
+  if(crown)
+    B = length(frs$sp)
+  else
+    B = length(frs$sp)-1 # note the origin is not a speciation event
+
   D = length(which(frs$end!=0))
   S = sum(frs$start-frs$end)
 
@@ -29,16 +34,19 @@ bd.probability.range<-function(frs,b,d){
 
 }
 
-
 #' Birth-death probability (Stadler, 2010)
+#'
+#' Probability of extant species phylogeny conditioned on the origin (Stadler, 2010, eq. 2)
+#' or the crown (crown = T) (Stadler, 2010, eq. 5)
 #'
 #' @param tree Phylo object of extant taxa only
 #' @param b Rate of speciation (branching)
 #' @param d Rate of extinction (branch termination)
 #' @param rho Extant species sampling
+#' @param crown Boolean stating whether the process is conditioned on the crown (default = F)
 #' @return Log likelihood
 #' @export
-bd.probability.extant<-function(tree,b,d,rho=1,mpfr=F){
+bd.probability.extant<-function(tree,b,d,rho=1,mpfr=FALSE,crown=FALSE){
   tree<-tree
   bits = 128
   if(mpfr){
@@ -51,15 +59,32 @@ bd.probability.extant<-function(tree,b,d,rho=1,mpfr=F){
     mu<<-d
     rho<<-rho
   }
+  rho<-rho
+  crown<-crown
 
   tree<-geiger::drop.extinct(tree)
 
   # calculate node ages
   node.ages = TreeSim::getx(tree)
 
-  # take care of the origin
-  origin = max(node.ages)+tree$root.edge
-  ll = bdP1Log(origin) - log(1 - bdP0(origin))
+  # equation 5
+  if(crown){
+
+    # take care of the crown
+    c = max(node.ages)
+    ll = 2 * ( bdP1Log(c) - log(1 - bdP0(c)) )
+
+    # eliminate the root node
+    node.ages = node.ages[-which(node.ages==c)]
+
+  }
+  else { # equation 2
+
+    # take care of the origin
+    origin = max(node.ages)+tree$root.edge
+    ll = bdP1Log(origin) - log(1 - bdP0(origin))
+
+  }
 
   for(i in node.ages){
     ll = ll + log(lambda) + bdP1Log(i)
