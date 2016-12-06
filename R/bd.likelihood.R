@@ -58,10 +58,10 @@ est.bd.extant<-function(b,d,tree,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=
 
   if(method==2){
     est<-optim(c(b,d),bd.likelihood.est.extant,tree=tree,crown=crown,rho=rho,control=list(fnscale=-1,maxit=1000), # fnscale=-1 tells the function to maximise
-             method="L-BFGS-B", # this method allows bounds on parameters
-             lower=c(lower.b,lower.d),
-             upper=c(upper.b,upper.d)
-             )
+               method="L-BFGS-B", # this method allows bounds on parameters
+               lower=c(lower.b,lower.d),
+               upper=c(upper.b,upper.d)
+    )
   }
   else{
     est<-optim(c(b,d),bd.likelihood.est.extant,tree=tree,crown=crown,rho=rho,control=list(fnscale=-1,maxit=1000))
@@ -82,6 +82,41 @@ bd.likelihood.est.extant<-function(p,tree,crown=FALSE,rho=1){
 
   if((b < d) || (b == d))
    return(-10^100)
+
+  lk=bd.probability.extant(tree,b,d,crown=crown,rho=rho)
+  return(lk)
+  #eof
+}
+
+######## phylogenetic estimates constrained
+
+#' @export
+est.bd.extant.constr<-function(nd,tree,crown=FALSE,rho=1){
+  nd<-nd # fixed value
+  tree<-tree
+  crown<-crown
+  rho<-rho
+
+  # use optimize for one-dimensional optimization
+  est<-optimize(bd.likelihood.est.extant.constr,tree=tree,nd=nd,crown=crown,rho=rho,c(0,1000),maximum = TRUE)
+
+  #est$par = abs(est$par)
+
+  return(est)
+  # eof
+}
+
+bd.likelihood.est.extant.constr<-function(b,tree,nd,crown=FALSE,rho=1){
+  b<-abs(b)
+  tree<-tree
+  nd<-nd
+  crown<-crown
+  rho<-rho
+
+  if(nd >= b)
+    return(-10^100)
+
+  d = b - nd
 
   lk=bd.probability.extant(tree,b,d,crown=crown,rho=rho)
   return(lk)
