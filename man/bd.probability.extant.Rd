@@ -4,7 +4,7 @@
 \alias{bd.probability.extant}
 \title{Birth-death probability (Stadler, 2010)}
 \usage{
-bd.probability.extant(tree, b, d, rho = 1, mpfr = F)
+bd.probability.extant(tree, b, d, rho = 1, mpfr = FALSE, crown = FALSE)
 }
 \arguments{
 \item{tree}{Phylo object of extant taxa only}
@@ -14,11 +14,14 @@ bd.probability.extant(tree, b, d, rho = 1, mpfr = F)
 \item{d}{Rate of extinction (branch termination)}
 
 \item{rho}{Extant species sampling}
+
+\item{crown}{Boolean stating whether the process is conditioned on the crown (default = F)}
 }
 \value{
 Log likelihood
 }
 \description{
-Birth-death probability (Stadler, 2010)
+Probability of extant species phylogeny conditioned on the origin (Stadler, 2010, eq. 2)
+or the crown (crown = T) (Stadler, 2010, eq. 5)
 }
 

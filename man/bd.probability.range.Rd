@@ -4,7 +4,7 @@
 \alias{bd.probability.range}
 \title{Birth-death probability (Keiding, 1975)}
 \usage{
-bd.probability.range(frs, b, d)
+bd.probability.range(frs, b, d, crown = FALSE)
 }
 \arguments{
 \item{frs}{Dataframe of species ranges}
