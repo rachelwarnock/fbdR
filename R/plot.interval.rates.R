@@ -1,4 +1,6 @@
-# export but don't document these
+
+
+#' @export
 
 
 plot.p.q.est.ab
