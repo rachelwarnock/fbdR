@@ -4,7 +4,7 @@
 \alias{gap.filler.rates}
 \title{Calculate speciation and extinction rates using the gap-filler approach}
 \usage{
-gap.filler.rates(fossils, basin.age, strata)
+gap.filler.rates(fossils, basin.age, strata, return.intervals = F)
 }
 \arguments{
 \item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
@@ -13,7 +13,7 @@ gap.filler.rates(fossils, basin.age, strata)
 
 \item{strata}{Number of stratigraphic horizons}
 
-\item{continuous}{If TRUE calculate continuous rates}
+\item{return.intervals}{If TRUE return per interval estimates}
 }
 \description{
 Calculate speciation and extinction rates using the gap-filler approach

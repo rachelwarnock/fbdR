@@ -311,12 +311,14 @@ interval.types.gf<-function(fossils,basin.age,strata) {
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
 #' @param continuous If TRUE calculate continuous rates
+#' @param return.intervals If TRUE return per interval estimates
 #' @export
-boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T) {
+boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=T) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
   continuous<-continuous
+  return.intervals<-return.intervals
 
   taxa.types = interval.types.bc(fossils,basin.age,strata)
 
@@ -341,8 +343,8 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T) {
     e.total=e.total+Nbt
     Ntot.total=Ntot.total+Nbt+Nbl
 
-    # calculate orgination rates
     if(!continuous){
+      # calculate orgination rates
       p.hat=-log(Nbt/(Nbt+NFt))
       p.hat=round(p.hat,3)
       # calculate extinction rates
@@ -350,6 +352,7 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T) {
       q.hat=round(q.hat,3)
     }
     else {
+      # calculate orgination rates
       p.hat=-log(Nbt/(Nbt+NFt))/s1
       p.hat=round(p.hat,3)
       # calculate extinction rates
@@ -366,7 +369,10 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T) {
     p.total=(-log(k.total/n.total))/s1
     q.total=(-log(e.total/Ntot.total))/s1
   }
-  return(list(o.e.rates,p.total,q.total))
+  if(return.intervals)
+    return(list(speciation=p.total,extinction=q.total,per.interval.rates=o.e.rates))
+  else
+    return(list(speciation=p.total,extinction=q.total))
   #eof
 }
 
@@ -376,12 +382,14 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T) {
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
 #' @param continuous If TRUE calculate continuous rates
+#' @param return.intervals If TRUE return per interval estimates
 #' @export
-uncorrected.rates<-function(fossils,basin.age,strata,continuous=T) {
+uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
   continuous<-continuous
+  return.intervals<-return.intervals
 
   taxa.types = interval.types.bc(fossils,basin.age,strata)
 
@@ -437,24 +445,33 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T) {
     p.total=(k.total/n.total)/s1
     q.total=(e.total/Ntot.total)/s1
   }
-
-  #return(o.e.rates)
-  return(list(o.e.rates,p.total,q.total))
+  if(return.intervals)
+    return(list(speciation=p.total,extinction=q.total,per.interval.rates=o.e.rates))
+  else
+    return(list(speciation=p.total,extinction=q.total))
   #eof
 }
 
 #' Calculate speciation and extinction rates using the three-timer approach
 #'
+#'
+#'@details
+#'The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
+#' The per-interval speciation rate lamda = log(2ti+1/3t) + log(Ps) \cr
+#' The per-interval extinction rate mu = log(2ti/3t) + log(Ps) \cr
+#'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
 #' @param continuous If TRUE calculate continuous rates
+#' @param return.intervals If TRUE return per interval estimates
 #' @export
-three.timer.rates<-function(fossils,basin.age,strata,continuous=T) {
+three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
   continuous<-continuous
+  return.intervals<-return.intervals
 
   taxa.types = interval.types.3t(fossils,basin.age,strata)
 
@@ -543,7 +560,10 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T) {
   if( (!is.na(q.total)) && (q.total < 0) ){
     q.total=0
   }
-  return(list(o.e.rates,p.total,q.total,Ps))
+  if(return.intervals)
+    return(list(speciation=p.total,extinction=q.total,sampling=Ps,per.interval.rates=o.e.rates))
+  else
+    return(list(speciation=p.total,extinction=q.total,sampling=Ps))
   # eof
 }
 
@@ -552,11 +572,13 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T) {
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
+#' @param return.intervals If TRUE return per interval estimates
 #' @export
-gap.filler.rates<-function(fossils,basin.age,strata) {
+gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
+  return.intervals<-return.intervals
 
   taxa.types = interval.types.gf(fossils,basin.age,strata)
 
@@ -628,25 +650,19 @@ gap.filler.rates<-function(fossils,basin.age,strata) {
   if( (!is.na(q.total)) && (q.total < 0) ){
     q.total=0
   }
-  return(list(o.e.rates,p.total,q.total))
+  if(return.intervals)
+    return(list(speciation=p.total,extinction=q.total,per.interval.rates=o.e.rates))
+  else
+    return(list(speciation=p.total,extinction=q.total))
 }
 
 
 
 
-# decide what to do with the return values about document them (I'm thinking maybe suppress the per inteval output or make it optional)
-# investigate the circumstances in which the fxns return NaN, Inf etc
-# tidy the functions
-
-
-# The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset
-# The per-interval speciation rate lamda = log(2ti+1/3t) + log(Ps)
-# The per-interval extinction rate mu = log(2ti/3t) + log(Ps)
 
 
 # to do:
-# I don't think the orig.exit functions should also return the taxon types || maybe it doesn't matter, if required it could be switched off
 # need to document the e, k and n notation
 # we need to think about how to handle the first and last time bins -> i think for the time being, just do what ever makes these methods *more* accurate
-# Prospective flexibility: non-uniform time bins
+
 

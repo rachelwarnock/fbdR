@@ -4,7 +4,8 @@
 \alias{boundary.crosser.rates}
 \title{Calculate speciation and extinction rates using the boundary crosser approach}
 \usage{
-boundary.crosser.rates(fossils, basin.age, strata, continuous = T)
+boundary.crosser.rates(fossils, basin.age, strata, continuous = T,
+  return.intervals = T)
 }
 \arguments{
 \item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
@@ -14,6 +15,8 @@ boundary.crosser.rates(fossils, basin.age, strata, continuous = T)
 \item{strata}{Number of stratigraphic horizons}
 
 \item{continuous}{If TRUE calculate continuous rates}
+
+\item{return.intervals}{If TRUE return per interval estimates}
 }
 \description{
 Calculate speciation and extinction rates using the boundary crosser approach

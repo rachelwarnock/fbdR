@@ -4,7 +4,8 @@
 \alias{three.timer.rates}
 \title{Calculate speciation and extinction rates using the three-timer approach}
 \usage{
-three.timer.rates(fossils, basin.age, strata, continuous = T)
+three.timer.rates(fossils, basin.age, strata, continuous = T,
+  return.intervals = F)
 }
 \arguments{
 \item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
@@ -14,8 +15,15 @@ three.timer.rates(fossils, basin.age, strata, continuous = T)
 \item{strata}{Number of stratigraphic horizons}
 
 \item{continuous}{If TRUE calculate continuous rates}
+
+\item{return.intervals}{If TRUE return per interval estimates}
 }
 \description{
 Calculate speciation and extinction rates using the three-timer approach
+}
+\details{
+The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
+The per-interval speciation rate lamda = log(2ti+1/3t) + log(Ps) \cr
+The per-interval extinction rate mu = log(2ti/3t) + log(Ps) \cr
 }
 
