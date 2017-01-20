@@ -42,10 +42,10 @@ first.last.appearances<-function(fossils) {
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param Number of stratigraphic horizons
+#' @param strata Number of stratigraphic horizons
 #' @return dataframe of per interval taxon types.
 #' @export
-interval.taxa.types<-function(fossils,basin.age,strata) {
+interval.types.bc<-function(fossils,basin.age,strata) {
   fossils = fossils
   basin.age = basin.age
   strata = strata
@@ -115,10 +115,10 @@ interval.taxa.types<-function(fossils,basin.age,strata) {
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param Number of stratigraphic horizons
+#' @param strata Number of stratigraphic horizons
 #' @return dataframe of per interval taxon types.
 #' @export
-interval.taxa.types.3t<-function(fossils,basin.age,strata) {
+interval.types.3t<-function(fossils,basin.age,strata) {
   fossils = fossils
   basin.age = basin.age
   strata = strata
@@ -208,10 +208,10 @@ interval.taxa.types.3t<-function(fossils,basin.age,strata) {
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param Number of stratigraphic horizons
+#' @param strata Number of stratigraphic horizons
 #' @return dataframe of per interval taxon types.
 #' @export
-interval.taxa.types.gf<-function(fossils,basin.age,strata) {
+interval.types.gf<-function(fossils,basin.age,strata) {
   fossils=fossils
   basin.age=basin.age
   strata=strata
@@ -307,16 +307,18 @@ interval.taxa.types.gf<-function(fossils,basin.age,strata) {
 
 #' Calculate speciation and extinction rates using the boundary crosser approach
 #'
-#' @param taxa.types Dataframe of per interval taxa types
+#' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param Number of stratigraphic horizons
-#' @param instantaneous If TRUE calculate instantaneous rates
+#' @param strata Number of stratigraphic horizons
+#' @param continuous If TRUE calculate continuous rates
 #' @export
-boundary.crosser.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
-  taxa.types=taxa.types
+boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T) {
+  fossils<-fossils
   basin.age<-basin.age
   strata<-strata
-  instantaneous<-instantaneous
+  continuous<-continuous
+
+  taxa.types = interval.types.bc(fossils,basin.age,strata)
 
   s1=basin.age/strata # equivalent to delta t
   o.e.rates<-data.frame(horizons=numeric(),NFl=numeric(),NFt=numeric(),Nbl=numeric(),Nbt=numeric(),p=numeric(),q=numeric()) # dataframe for FAs
@@ -340,7 +342,7 @@ boundary.crosser.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
     Ntot.total=Ntot.total+Nbt+Nbl
 
     # calculate orgination rates
-    if(instantaneous){
+    if(!continuous){
       p.hat=-log(Nbt/(Nbt+NFt))
       p.hat=round(p.hat,3)
       # calculate extinction rates
@@ -356,7 +358,7 @@ boundary.crosser.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
     }
     o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],NFl=NFl,NFt=NFt,Nbl=Nbl,Nbt=Nbt,p=p.hat,q=q.hat))
   }
-  if(instantaneous){
+  if(!continuous){
     p.total=(-log(k.total/n.total))
     q.total=(-log(e.total/Ntot.total))
   }
@@ -370,16 +372,18 @@ boundary.crosser.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
 
 #' Calculate speciation and extinction rates using the uncorrected approach
 #'
-#' @param taxa.types Dataframe of per interval taxa types
+#' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param Number of stratigraphic horizons
-#' @param instantaneous If TRUE calculate instantaneous rates
+#' @param strata Number of stratigraphic horizons
+#' @param continuous If TRUE calculate continuous rates
 #' @export
-uncorrected.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
-  taxa.types=taxa.types
+uncorrected.rates<-function(fossils,basin.age,strata,continuous=T) {
+  fossils<-fossils
   basin.age<-basin.age
   strata<-strata
-  instantaneous<-instantaneous
+  continuous<-continuous
+
+  taxa.types = interval.types.bc(fossils,basin.age,strata)
 
   s1=basin.age/strata # equivalent to delta t
   o.e.rates<-data.frame(horizons=numeric(),NFl=numeric(),NFt=numeric(),Nbl=numeric(),Nbt=numeric(),p=numeric(),q=numeric()) # dataframe for FAs
@@ -404,7 +408,7 @@ uncorrected.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
     e.total=e.total+NFl+Nbl
     Ntot.total=Ntot.total+Ntot
 
-    if(instantaneous){
+    if(!continuous){
       # calculate orgination rates
       p.hat=((NFl+NFt)/Ntot)
       p.hat=round(p.hat,3)
@@ -425,7 +429,7 @@ uncorrected.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
 
   }
 
-  if(instantaneous){
+  if(!continuous){
     p.total=(k.total/n.total)
     q.total=(e.total/Ntot.total)
   }
@@ -441,16 +445,18 @@ uncorrected.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
 
 #' Calculate speciation and extinction rates using the three-timer approach
 #'
-#' @param taxa.types Dataframe of per interval taxa types
+#' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param Number of stratigraphic horizons
-#' @param instantaneous If TRUE calculate instantaneous rates
+#' @param strata Number of stratigraphic horizons
+#' @param continuous If TRUE calculate continuous rates
 #' @export
-three.timer.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
-  taxa.types=taxa.types
+three.timer.rates<-function(fossils,basin.age,strata,continuous=T) {
+  fossils<-fossils
   basin.age<-basin.age
   strata<-strata
-  instantaneous<-instantaneous
+  continuous<-continuous
+
+  taxa.types = interval.types.3t(fossils,basin.age,strata)
 
   s1=basin.age/strata # equivalent to delta t
   o.e.rates<-data.frame(horizons=numeric(),p=numeric(),q=numeric()) # dataframe for p (speciation) and q (extinction) rates
@@ -495,7 +501,7 @@ three.timer.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
       three_t.total=three_t.total+three_t
 
       # calculate orgination rates
-      if(instantaneous){
+      if(!continuous){
         p.hat=( log(two_t_b/three_t)+log(Ps) )
         p.hat=round(p.hat,3)
         # calculate extinction rates
@@ -522,7 +528,7 @@ three.timer.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
     }
   }
 
-  if(instantaneous){
+  if(!continuous){
     p.total=( log(two_t_b.total/three_t.total) + log(Ps) )
     q.total=( log(two_t_a.total/three_t.total) + log(Ps) )
   }
@@ -543,13 +549,16 @@ three.timer.rates<-function(taxa.types,basin.age,strata,instantaneous=F) {
 
 #' Calculate speciation and extinction rates using the gap-filler approach
 #'
-#' @param taxa.types Dataframe of per interval taxa types
+#' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param Number of stratigraphic horizons
-#' @param instantaneous If TRUE calculate instantaneous rates
+#' @param strata Number of stratigraphic horizons
 #' @export
-gap.filler.rates<-function(taxa.types,basin.age,strata) {
-  taxa.types=taxa.types
+gap.filler.rates<-function(fossils,basin.age,strata) {
+  fossils<-fossils
+  basin.age<-basin.age
+  strata<-strata
+
+  taxa.types = interval.types.gf(fossils,basin.age,strata)
 
   s1=basin.age/strata # equivalent to delta t
   o.e.rates<-data.frame(horizons=numeric(),p=numeric(),q=numeric()) # dataframe for p (speciation) and q (extinction) rates
@@ -619,21 +628,12 @@ gap.filler.rates<-function(taxa.types,basin.age,strata) {
   if( (!is.na(q.total)) && (q.total < 0) ){
     q.total=0
   }
-
   return(list(o.e.rates,p.total,q.total))
 }
 
 
 
 
-
-
-
-
-# to do
-# rename the interval.taxa.types fxns interval.types.bc etc.
-# why is instantaneous = F? investigate this option. I think this term being used incorrectly
-# compress the functions
 # decide what to do with the return values about document them (I'm thinking maybe suppress the per inteval output or make it optional)
 # investigate the circumstances in which the fxns return NaN, Inf etc
 # tidy the functions

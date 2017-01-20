@@ -4,16 +4,16 @@
 \alias{uncorrected.rates}
 \title{Calculate speciation and extinction rates using the uncorrected approach}
 \usage{
-uncorrected.rates(taxa.types, basin.age, strata, instantaneous = F)
+uncorrected.rates(fossils, basin.age, strata, continuous = T)
 }
 \arguments{
-\item{taxa.types}{Dataframe of per interval taxa types}
+\item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{instantaneous}{If TRUE calculate instantaneous rates}
+\item{strata}{Number of stratigraphic horizons}
 
-\item{Number}{of stratigraphic horizons}
+\item{continuous}{If TRUE calculate continuous rates}
 }
 \description{
 Calculate speciation and extinction rates using the uncorrected approach

@@ -4,16 +4,16 @@
 \alias{gap.filler.rates}
 \title{Calculate speciation and extinction rates using the gap-filler approach}
 \usage{
-gap.filler.rates(taxa.types, basin.age, strata)
+gap.filler.rates(fossils, basin.age, strata)
 }
 \arguments{
-\item{taxa.types}{Dataframe of per interval taxa types}
+\item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{Number}{of stratigraphic horizons}
+\item{strata}{Number of stratigraphic horizons}
 
-\item{instantaneous}{If TRUE calculate instantaneous rates}
+\item{continuous}{If TRUE calculate continuous rates}
 }
 \description{
 Calculate speciation and extinction rates using the gap-filler approach
