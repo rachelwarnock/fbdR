@@ -623,10 +623,10 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
       q.hat=0
     }
 
-    if(h==20){ # the first sampled interval after the beginning of the process
+    if(h==length(taxa.types$horizons)){ # the first sampled interval after the beginning of the process
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=NaN,q=NaN))
     }
-    else if(h==19){ # the second sampled interval after the beginning of the process
+    else if(h==(length(taxa.types$horizons)-1)){ # the second sampled interval after the beginning of the process
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=NaN,q=q.hat))
     }
     else if(h==1){ # the last sampled interval before the present
@@ -665,12 +665,5 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
 }
 
 
-
-
-
-
-# to do:
-# need to document the e, k and n notation
-# we need to think about how to handle the first and last time bins -> i think for the time being, just do what ever makes these methods *more* accurate
 
 
