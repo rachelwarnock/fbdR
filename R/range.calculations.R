@@ -46,9 +46,9 @@ first.last.appearances<-function(fossils) {
 #' @return dataframe of per interval taxon types.
 #' @export
 interval.types.bc<-function(fossils,basin.age,strata) {
-  fossils = fossils
-  basin.age = basin.age
-  strata = strata
+  fossils<-fossils
+  basin.age<-basin.age
+  strata<-strata
 
   FAs<-first.last.appearances(fossils)
 
@@ -76,7 +76,7 @@ interval.types.bc<-function(fossils,basin.age,strata) {
       if(fa==h) {
         # and the first appearance is equivalent to the last appearance
         # species is categorized as NFL
-        if(fa==la) { # loop x
+        if(fa==la) {
           NFls=c(NFls,FAs[,1][i])
         }
         # else species is categorized as NFt
@@ -93,9 +93,7 @@ interval.types.bc<-function(fossils,basin.age,strata) {
         Nbts=c(Nbts,FAs[,1][i])
       }
     }
-
     taxa.types<-rbind(taxa.types,data.frame(horizons=h,NFl=length(NFls),NFt=length(NFts),Nbl=length(Nbls),Nbt=length(Nbts)))
-
   }
   return(taxa.types)
   #eof
@@ -119,9 +117,9 @@ interval.types.bc<-function(fossils,basin.age,strata) {
 #' @return dataframe of per interval taxon types.
 #' @export
 interval.types.3t<-function(fossils,basin.age,strata) {
-  fossils = fossils
-  basin.age = basin.age
-  strata = strata
+  fossils<-fossils
+  basin.age<-basin.age
+  strata<-strata
 
   lineages<-unique(fossils$sp)
 
@@ -212,9 +210,9 @@ interval.types.3t<-function(fossils,basin.age,strata) {
 #' @return dataframe of per interval taxon types.
 #' @export
 interval.types.gf<-function(fossils,basin.age,strata) {
-  fossils=fossils
-  basin.age=basin.age
-  strata=strata
+  fossils<-fossils
+  basin.age<-basin.age
+  strata<-strata
 
   lineages<-unique(fossils$sp)
 
@@ -312,6 +310,7 @@ interval.types.gf<-function(fossils,basin.age,strata) {
 #' @param strata Number of stratigraphic horizons
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
+#' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' @export
 boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=T) {
   fossils<-fossils
@@ -325,11 +324,11 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
   s1=basin.age/strata # equivalent to delta t
   o.e.rates<-data.frame(horizons=numeric(),NFl=numeric(),NFt=numeric(),Nbl=numeric(),Nbt=numeric(),p=numeric(),q=numeric()) # dataframe for FAs
 
-  k.total=0
-  n.total=0
+  k.total=0 # range through taxa
+  n.total=0 # range through taxa + specation events
 
-  Ntot.total=0
-  e.total=0
+  e.total=0 # range through taxa
+  Ntot.total=0 # range through taxa + extinction events
 
   for(h in 1:length(taxa.types[,1])){
     NFl=taxa.types[,2][h]
@@ -343,21 +342,27 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
     e.total=e.total+Nbt
     Ntot.total=Ntot.total+Nbt+Nbl
 
-    if(!continuous){
-      # calculate orgination rates
-      p.hat=-log(Nbt/(Nbt+NFt))
-      p.hat=round(p.hat,3)
-      # calculate extinction rates
-      q.hat=-log(Nbt/(Nbt+Nbl))
-      q.hat=round(q.hat,3)
+    if(Nbt > 0){
+      if(!continuous){
+        # calculate orgination rates
+        p.hat=-log(Nbt/(Nbt+NFt))
+        p.hat=round(p.hat,3)
+        # calculate extinction rates
+        q.hat=-log(Nbt/(Nbt+Nbl))
+        q.hat=round(q.hat,3)
+      }
+      else {
+        # calculate orgination rates
+        p.hat=-log(Nbt/(Nbt+NFt))/s1
+        p.hat=round(p.hat,3)
+        # calculate extinction rates
+        q.hat=-log(Nbt/(Nbt+Nbl))/s1
+        q.hat=round(q.hat,3)
+      }
     }
-    else {
-      # calculate orgination rates
-      p.hat=-log(Nbt/(Nbt+NFt))/s1
-      p.hat=round(p.hat,3)
-      # calculate extinction rates
-      q.hat=-log(Nbt/(Nbt+Nbl))/s1
-      q.hat=round(q.hat,3)
+    else{
+      p.hat=NaN
+      q.hat=NaN
     }
     o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],NFl=NFl,NFt=NFt,Nbl=Nbl,Nbt=Nbt,p=p.hat,q=q.hat))
   }
@@ -383,6 +388,7 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
 #' @param strata Number of stratigraphic horizons
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
+#' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' @export
 uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -396,11 +402,11 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
   s1=basin.age/strata # equivalent to delta t
   o.e.rates<-data.frame(horizons=numeric(),NFl=numeric(),NFt=numeric(),Nbl=numeric(),Nbt=numeric(),p=numeric(),q=numeric()) # dataframe for FAs
 
-  k.total=0
-  n.total=0
+  k.total=0 # total number of speciation events
+  n.total=0 # total diversity
 
-  Ntot.total=0
-  e.total=0
+  e.total=0 # total number of extinction events
+  Ntot.total=0 # total diversity (note this denominator may be different in alternative models)
 
   for(h in 1:length(taxa.types[,1])){
     NFl=taxa.types[,2][h]
@@ -432,9 +438,7 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
       q.hat=((NFl+Nbl)/Ntot)/s1
       q.hat=round(q.hat,3)
     }
-
     o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],NFl=NFl,NFt=NFt,Nbl=Nbl,Nbt=Nbt,p=p.hat,q=q.hat))
-
   }
 
   if(!continuous){
@@ -465,6 +469,7 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param strata Number of stratigraphic horizons
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
+#' @return named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' @export
 three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -478,18 +483,10 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
   s1=basin.age/strata # equivalent to delta t
   o.e.rates<-data.frame(horizons=numeric(),p=numeric(),q=numeric()) # dataframe for p (speciation) and q (extinction) rates
 
-  # part 1.
   # calculate tree wide preservation
   three_t_total=sum(taxa.types$three_t)
   Pt_total=sum(taxa.types$Pt)
   Ps=three_t_total/(three_t_total+Pt_total)
-  #print(paste("Preservation rate:", round(Ps,3)))
-
-  #k.total=0
-  #n.total=0
-
-  #Ntot.total=0
-  #e.total=0
 
   two_t_a.total=0
   two_t_b.total=0
@@ -507,30 +504,31 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
       two_t_b=taxa.types$two_t_b[h]
       three_t=taxa.types$three_t[h]
 
-      #k.total=k.total+Nbt
-      #n.total=n.total+Nbt+NFt
-
-      #e.total=e.total+Nbt
-      #Ntot.total=Ntot.total+Nbt+Nbl
-
       two_t_a.total=two_t_a.total+two_t_a
       two_t_b.total=two_t_b.total+two_t_b
       three_t.total=three_t.total+three_t
 
-      # calculate orgination rates
-      if(!continuous){
-        p.hat=( log(two_t_b/three_t)+log(Ps) )
-        p.hat=round(p.hat,3)
-        # calculate extinction rates
-        q.hat=( log(two_t_a/three_t)+log(Ps) )
-        q.hat=round(q.hat,3)
+      if(three_t > 0){
+        if(!continuous){
+          # calculate orgination rates
+          p.hat=( log(two_t_b/three_t)+log(Ps) )
+          p.hat=round(p.hat,3)
+          # calculate extinction rates
+          q.hat=( log(two_t_a/three_t)+log(Ps) )
+          q.hat=round(q.hat,3)
+        }
+        else{
+          # calculate orgination rates
+          p.hat=(( log(two_t_b/three_t)+log(Ps) )/s1 )
+          p.hat=round(p.hat,3)
+          # calculate extinction rates
+          q.hat=(( log(two_t_a/three_t)+log(Ps) ) /s1 )
+          q.hat=round(q.hat,3)
+        }
       }
       else{
-        p.hat=(( log(two_t_b/three_t)+log(Ps) )/s1 )
-        p.hat=round(p.hat,3)
-        # calculate extinction rates
-        q.hat=(( log(two_t_a/three_t)+log(Ps) ) /s1 )
-        q.hat=round(q.hat,3)
+        p.hat = NaN
+        q.hat = NaN
       }
 
       if( (!is.na(p.hat)) && (p.hat < 0) ){
@@ -539,9 +537,7 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
       if( (!is.na(q.hat)) && (q.hat < 0) ){
         q.hat=0
       }
-
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=p.hat,q=q.hat))
-
     }
   }
 
@@ -573,6 +569,7 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
 #' @param return.intervals If TRUE return per interval estimates
+#' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' @export
 gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   fossils<-fossils
@@ -602,13 +599,22 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
     gf_a=taxa.types$gf_a[h]
     gf_b=taxa.types$gf_b[h]
 
-    # calculate orgination rates
-    #p.hat=-log(Nbt/(Nbt+NFt))/s1 # bc method
-    p.hat=(log( (two_t_b + p_t) / (three_t + p_t + gf_a) )/s1 )
-    p.hat=round(p.hat,3)
-    # calculate extinction rates
-    q.hat=(log( (two_t_a + p_t) / (three_t + p_t + gf_b) )/s1 )
-    q.hat=round(q.hat,3)
+    if(sum(c(three_t,p_t,gf_a)) > 0){
+      # calculate orgination rates
+      p.hat=(log( (two_t_b + p_t) / (three_t + p_t + gf_a) )/s1 )
+      p.hat=round(p.hat,3)
+    }
+    else{
+      p.hat = NaN
+    }
+    if(sum(c(three_t,p_t,gf_b)) > 0){
+      # calculate extinction rates
+      q.hat=(log( (two_t_a + p_t) / (three_t + p_t + gf_b) )/s1 )
+      q.hat=round(q.hat,3)
+    }
+    else{
+      q.hat = NaN
+    }
 
     if( (!is.na(p.hat)) && (p.hat < 0) ){
       p.hat=0
@@ -650,10 +656,12 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   if( (!is.na(q.total)) && (q.total < 0) ){
     q.total=0
   }
+
   if(return.intervals)
     return(list(speciation=p.total,extinction=q.total,per.interval.rates=o.e.rates))
   else
     return(list(speciation=p.total,extinction=q.total))
+  #eof
 }
 
 

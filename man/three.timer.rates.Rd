@@ -18,6 +18,9 @@ three.timer.rates(fossils, basin.age, strata, continuous = T,
 
 \item{return.intervals}{If TRUE return per interval estimates}
 }
+\value{
+named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+}
 \description{
 Calculate speciation and extinction rates using the three-timer approach
 }
