@@ -1,12 +1,15 @@
 Package: fbdR
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Title: Calculate Birth and Death Rates
+Version: 0.1
+Authors@R: person("Rachel", "Warnock", email = "rachel.warnock@example.com", role = c("aut", "cre"))
+Description: Calculate birth and death rates from fossils and phylogenies.
 Depends:
     R (>= 3.3.0)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+    ape,
+    coda
 RoxygenNote: 5.0.1
 
