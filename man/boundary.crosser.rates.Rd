@@ -5,7 +5,7 @@
 \title{Calculate speciation and extinction rates using the boundary crosser approach}
 \usage{
 boundary.crosser.rates(fossils, basin.age, strata, continuous = T,
-  return.intervals = T)
+  return.intervals = F)
 }
 \arguments{
 \item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}

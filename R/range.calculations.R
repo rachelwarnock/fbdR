@@ -312,7 +312,7 @@ interval.types.gf<-function(fossils,basin.age,strata) {
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' @export
-boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=T) {
+boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
