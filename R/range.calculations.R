@@ -366,14 +366,21 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
     }
     o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],NFl=NFl,NFt=NFt,Nbl=Nbl,Nbt=Nbt,p=p.hat,q=q.hat))
   }
-  if(!continuous){
-    p.total=(-log(k.total/n.total))
-    q.total=(-log(e.total/Ntot.total))
+  if(k.total > 0){
+    if(!continuous){
+      p.total=(-log(k.total/n.total))
+      q.total=(-log(e.total/Ntot.total))
+    }
+    else{
+      p.total=(-log(k.total/n.total))/s1
+      q.total=(-log(e.total/Ntot.total))/s1
+    }
   }
   else{
-    p.total=(-log(k.total/n.total))/s1
-    q.total=(-log(e.total/Ntot.total))/s1
+    p.total = NaN
+    q.total = NaN
   }
+
   if(return.intervals)
     return(list(speciation=p.total,extinction=q.total,per.interval.rates=o.e.rates))
   else
@@ -541,13 +548,19 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
     }
   }
 
-  if(!continuous){
-    p.total=( log(two_t_b.total/three_t.total) + log(Ps) )
-    q.total=( log(two_t_a.total/three_t.total) + log(Ps) )
+  if(three_t.total > 0){
+    if(!continuous){
+      p.total=( log(two_t_b.total/three_t.total) + log(Ps) )
+      q.total=( log(two_t_a.total/three_t.total) + log(Ps) )
+    }
+    else {
+      p.total=( log(two_t_b.total/three_t.total) + log(Ps))/s1
+      q.total=( log(two_t_a.total/three_t.total) + log(Ps))/s1
+    }
   }
-  else {
-    p.total=( log(two_t_b.total/three_t.total) + log(Ps))/s1
-    q.total=( log(two_t_a.total/three_t.total) + log(Ps))/s1
+  else{
+    p.total = NaN
+    q.total = NaN
   }
 
   if( (!is.na(p.total)) && (p.total < 0) ){
@@ -647,8 +660,18 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
 
   }
 
-  p.total=( log( (two_t_b.total + p_t.total) / (three_t.total + p_t.total + gap.filler_a.total) ) ) /s1
-  q.total=( log( (two_t_a.total + p_t.total)/ (three_t.total + p_t.total + gap.filler_b.total) ) ) /s1
+  if(sum(c(three_t.total,p_t.total,gap.filler_a.total)) > 0){
+    p.total = ( log( (two_t_b.total + p_t.total) / (three_t.total + p_t.total + gap.filler_a.total) ) ) /s1
+  }
+  else{
+    p.total = NaN
+  }
+  if(sum(c(three_t.total,p_t.total,gap.filler_b.total)) > 0){
+    q.total=( log( (two_t_a.total + p_t.total)/ (three_t.total + p_t.total + gap.filler_b.total) ) ) /s1
+  }
+  else{
+    q.total = NaN
+  }
 
   if( (!is.na(p.total)) && (p.total < 0) ){
     p.total=0
