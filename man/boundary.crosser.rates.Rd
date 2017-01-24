@@ -20,6 +20,7 @@ boundary.crosser.rates(fossils, basin.age, strata, continuous = T,
 }
 \value{
 named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+Note this approach cannot estimate rates for the first interval.
 }
 \description{
 Calculate speciation and extinction rates using the boundary crosser approach

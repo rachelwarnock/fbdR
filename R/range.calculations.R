@@ -311,6 +311,7 @@ interval.types.gf<-function(fossils,basin.age,strata) {
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+#' Note this approach cannot estimate rates for the first interval.
 #' @export
 boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -466,8 +467,8 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' Calculate speciation and extinction rates using the three-timer approach
 #'
 #'
-#'@details
-#'The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
+#' @details
+#' The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
 #' The per-interval speciation rate lamda = log(2ti+1/3t) + log(Ps) \cr
 #' The per-interval extinction rate mu = log(2ti/3t) + log(Ps) \cr
 #'
@@ -477,6 +478,7 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+#' Note this approach cannot estimate rates for the first interval.
 #' @export
 three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -501,7 +503,7 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 
   for(h in 1:length(taxa.types[,1])){
 
-    if(h==20){ # the first sampled interval from the beginning of the process
+    if(h==length(taxa.types[,1])){ # the first sampled interval from the beginning of the process
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=NaN,q=NaN))
     }
     else {
@@ -583,6 +585,7 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param strata Number of stratigraphic horizons
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+#' Note this approach cannot estimate specation for the first or second interval and cannot estimate extinction for the first or last interval.
 #' @export
 gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   fossils<-fossils
