@@ -337,6 +337,7 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
     Nbl=taxa.types[,4][h]
     Nbt=taxa.types[,5][h]
 
+
     k.total=k.total+Nbt
     n.total=n.total+Nbt+NFt
 
@@ -502,21 +503,16 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
   three_t.total=0
 
   for(h in 1:length(taxa.types[,1])){
+    Ns=taxa.types$Ns[h]
+    one_t=taxa.types$one_t[h]
+    two_t_a=taxa.types$two_t_a[h]
+    two_t_b=taxa.types$two_t_b[h]
+    three_t=taxa.types$three_t[h]
 
     if(h==length(taxa.types[,1])){ # the first sampled interval from the beginning of the process
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=NaN,q=NaN))
     }
     else {
-      Ns=taxa.types$Ns[h]
-      one_t=taxa.types$one_t[h]
-      two_t_a=taxa.types$two_t_a[h]
-      two_t_b=taxa.types$two_t_b[h]
-      three_t=taxa.types$three_t[h]
-
-      two_t_a.total=two_t_a.total+two_t_a
-      two_t_b.total=two_t_b.total+two_t_b
-      three_t.total=three_t.total+three_t
-
       if(three_t > 0){
         if(!continuous){
           # calculate orgination rates
@@ -548,6 +544,9 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
       }
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=p.hat,q=q.hat))
     }
+    two_t_a.total = two_t_a.total+two_t_a
+    two_t_b.total = two_t_b.total+two_t_b
+    three_t.total = three_t.total+three_t
   }
 
   if(three_t.total > 0){
@@ -606,14 +605,14 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   gap.filler_b.total=0
 
   for(h in 1:length(taxa.types[,1])){
-    Ns=taxa.types$Ns[h]
-    one_t=taxa.types$one_t[h]
-    two_t_a=taxa.types$two_t_a[h]
-    two_t_b=taxa.types$two_t_b[h]
-    three_t=taxa.types$three_t[h]
-    p_t=taxa.types$Pt[h]
-    gf_a=taxa.types$gf_a[h]
-    gf_b=taxa.types$gf_b[h]
+    Ns = taxa.types$Ns[h]
+    one_t = taxa.types$one_t[h]
+    two_t_a = taxa.types$two_t_a[h]
+    two_t_b = taxa.types$two_t_b[h]
+    three_t = taxa.types$three_t[h]
+    p_t = taxa.types$Pt[h]
+    gf_a = taxa.types$gf_a[h]
+    gf_b = taxa.types$gf_b[h]
 
     if(sum(c(three_t,p_t,gf_a)) > 0){
       # calculate orgination rates
@@ -652,14 +651,13 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=p.hat,q=q.hat))
     }
 
-    if(!(h %in% c(1,19,20))){
-      two_t_a.total=two_t_a.total+two_t_a
-      two_t_b.total=two_t_b.total+two_t_b
-      three_t.total=three_t.total+three_t
-      p_t.total=p_t.total+p_t
-      gap.filler_a.total=gap.filler_a.total+gf_a
-      gap.filler_b.total=gap.filler_b.total+gf_b
-    }
+    #if(!(h %in% c(1,19,20)))
+      two_t_a.total = two_t_a.total+two_t_a
+      two_t_b.total = two_t_b.total+two_t_b
+      three_t.total = three_t.total+three_t
+      p_t.total = p_t.total+p_t
+      gap.filler_a.total = gap.filler_a.total+gf_a
+      gap.filler_b.total = gap.filler_b.total+gf_b
 
   }
 
@@ -690,6 +688,6 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   #eof
 }
 
-
-
+# Note functions return NA if insufficient information is available to estimate rates (not zero).
+# e.g. zero means the estimated rate(s) = zero.
 
