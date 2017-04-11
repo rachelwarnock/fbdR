@@ -311,8 +311,9 @@ interval.types.gf<-function(fossils,basin.age,strata) {
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+#' Note this approach cannot estimate rates for the first interval.
 #' @export
-boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=T) {
+boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
@@ -335,6 +336,7 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
     NFt=taxa.types[,3][h]
     Nbl=taxa.types[,4][h]
     Nbt=taxa.types[,5][h]
+
 
     k.total=k.total+Nbt
     n.total=n.total+Nbt+NFt
@@ -366,14 +368,21 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
     }
     o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],NFl=NFl,NFt=NFt,Nbl=Nbl,Nbt=Nbt,p=p.hat,q=q.hat))
   }
-  if(!continuous){
-    p.total=(-log(k.total/n.total))
-    q.total=(-log(e.total/Ntot.total))
+  if(k.total > 0){
+    if(!continuous){
+      p.total=(-log(k.total/n.total))
+      q.total=(-log(e.total/Ntot.total))
+    }
+    else{
+      p.total=(-log(k.total/n.total))/s1
+      q.total=(-log(e.total/Ntot.total))/s1
+    }
   }
   else{
-    p.total=(-log(k.total/n.total))/s1
-    q.total=(-log(e.total/Ntot.total))/s1
+    p.total = NaN
+    q.total = NaN
   }
+
   if(return.intervals)
     return(list(speciation=p.total,extinction=q.total,per.interval.rates=o.e.rates))
   else
@@ -459,8 +468,8 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' Calculate speciation and extinction rates using the three-timer approach
 #'
 #'
-#'@details
-#'The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
+#' @details
+#' The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
 #' The per-interval speciation rate lamda = log(2ti+1/3t) + log(Ps) \cr
 #' The per-interval extinction rate mu = log(2ti/3t) + log(Ps) \cr
 #'
@@ -470,6 +479,7 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+#' Note this approach cannot estimate rates for the first interval.
 #' @export
 three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -493,21 +503,16 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
   three_t.total=0
 
   for(h in 1:length(taxa.types[,1])){
+    Ns=taxa.types$Ns[h]
+    one_t=taxa.types$one_t[h]
+    two_t_a=taxa.types$two_t_a[h]
+    two_t_b=taxa.types$two_t_b[h]
+    three_t=taxa.types$three_t[h]
 
-    if(h==20){ # the first sampled interval from the beginning of the process
+    if(h==length(taxa.types[,1])){ # the first sampled interval from the beginning of the process
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=NaN,q=NaN))
     }
     else {
-      Ns=taxa.types$Ns[h]
-      one_t=taxa.types$one_t[h]
-      two_t_a=taxa.types$two_t_a[h]
-      two_t_b=taxa.types$two_t_b[h]
-      three_t=taxa.types$three_t[h]
-
-      two_t_a.total=two_t_a.total+two_t_a
-      two_t_b.total=two_t_b.total+two_t_b
-      three_t.total=three_t.total+three_t
-
       if(three_t > 0){
         if(!continuous){
           # calculate orgination rates
@@ -539,15 +544,24 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
       }
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=p.hat,q=q.hat))
     }
+    two_t_a.total = two_t_a.total+two_t_a
+    two_t_b.total = two_t_b.total+two_t_b
+    three_t.total = three_t.total+three_t
   }
 
-  if(!continuous){
-    p.total=( log(two_t_b.total/three_t.total) + log(Ps) )
-    q.total=( log(two_t_a.total/three_t.total) + log(Ps) )
+  if(three_t.total > 0){
+    if(!continuous){
+      p.total=( log(two_t_b.total/three_t.total) + log(Ps) )
+      q.total=( log(two_t_a.total/three_t.total) + log(Ps) )
+    }
+    else {
+      p.total=( log(two_t_b.total/three_t.total) + log(Ps))/s1
+      q.total=( log(two_t_a.total/three_t.total) + log(Ps))/s1
+    }
   }
-  else {
-    p.total=( log(two_t_b.total/three_t.total) + log(Ps))/s1
-    q.total=( log(two_t_a.total/three_t.total) + log(Ps))/s1
+  else{
+    p.total = NaN
+    q.total = NaN
   }
 
   if( (!is.na(p.total)) && (p.total < 0) ){
@@ -570,6 +584,7 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param strata Number of stratigraphic horizons
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+#' Note this approach cannot estimate specation for the first or second interval and cannot estimate extinction for the first or last interval.
 #' @export
 gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   fossils<-fossils
@@ -590,14 +605,14 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   gap.filler_b.total=0
 
   for(h in 1:length(taxa.types[,1])){
-    Ns=taxa.types$Ns[h]
-    one_t=taxa.types$one_t[h]
-    two_t_a=taxa.types$two_t_a[h]
-    two_t_b=taxa.types$two_t_b[h]
-    three_t=taxa.types$three_t[h]
-    p_t=taxa.types$Pt[h]
-    gf_a=taxa.types$gf_a[h]
-    gf_b=taxa.types$gf_b[h]
+    Ns = taxa.types$Ns[h]
+    one_t = taxa.types$one_t[h]
+    two_t_a = taxa.types$two_t_a[h]
+    two_t_b = taxa.types$two_t_b[h]
+    three_t = taxa.types$three_t[h]
+    p_t = taxa.types$Pt[h]
+    gf_a = taxa.types$gf_a[h]
+    gf_b = taxa.types$gf_b[h]
 
     if(sum(c(three_t,p_t,gf_a)) > 0){
       # calculate orgination rates
@@ -636,19 +651,28 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
       o.e.rates<-rbind(o.e.rates,data.frame(horizons=taxa.types$horizons[h],p=p.hat,q=q.hat))
     }
 
-    if(!(h %in% c(1,19,20))){
-      two_t_a.total=two_t_a.total+two_t_a
-      two_t_b.total=two_t_b.total+two_t_b
-      three_t.total=three_t.total+three_t
-      p_t.total=p_t.total+p_t
-      gap.filler_a.total=gap.filler_a.total+gf_a
-      gap.filler_b.total=gap.filler_b.total+gf_b
-    }
+    #if(!(h %in% c(1,19,20)))
+      two_t_a.total = two_t_a.total+two_t_a
+      two_t_b.total = two_t_b.total+two_t_b
+      three_t.total = three_t.total+three_t
+      p_t.total = p_t.total+p_t
+      gap.filler_a.total = gap.filler_a.total+gf_a
+      gap.filler_b.total = gap.filler_b.total+gf_b
 
   }
 
-  p.total=( log( (two_t_b.total + p_t.total) / (three_t.total + p_t.total + gap.filler_a.total) ) ) /s1
-  q.total=( log( (two_t_a.total + p_t.total)/ (three_t.total + p_t.total + gap.filler_b.total) ) ) /s1
+  if(sum(c(three_t.total,p_t.total,gap.filler_a.total)) > 0){
+    p.total = ( log( (two_t_b.total + p_t.total) / (three_t.total + p_t.total + gap.filler_a.total) ) ) /s1
+  }
+  else{
+    p.total = NaN
+  }
+  if(sum(c(three_t.total,p_t.total,gap.filler_b.total)) > 0){
+    q.total=( log( (two_t_a.total + p_t.total)/ (three_t.total + p_t.total + gap.filler_b.total) ) ) /s1
+  }
+  else{
+    q.total = NaN
+  }
 
   if( (!is.na(p.total)) && (p.total < 0) ){
     p.total=0
@@ -664,6 +688,6 @@ gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   #eof
 }
 
-
-
+# Note functions return NA if insufficient information is available to estimate rates (not zero).
+# e.g. zero means the estimated rate(s) = zero.
 
