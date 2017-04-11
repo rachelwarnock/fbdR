@@ -1,14 +1,24 @@
 
 #' @export
-fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min){
+fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min,mpfr=F){
   frs<-frs
   numFossils<-k
 
-  lambda<<-b
-  mu<<-d
-  psi<<-s
-  rho<<-rho
-  intervals.min<<-int.min
+  bits = 128
+  if(mpfr){
+    lambda<<-mpfr(b, bits)
+    mu<<-mpfr(d, bits)
+    psi<<-mpfr(s, bits)
+    rho<<-mpfr(rho, bits)
+    intervals.min<<-mpfr(int.min, bits)
+  }
+  else{
+    lambda<<-b
+    mu<<-d
+    psi<<-s
+    rho<<-rho
+    intervals.min<<-int.min
+  }
 
   num.lineages = length(frs$sp)
   num.extinct = num.lineages - sum(frs$extant)
@@ -17,11 +27,15 @@ fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min){
 
   lk = num.lineages * log(rho[1]) - log(1 - fbdSkylineP(oi, ot))
 
+  #print(lk)
+
   # fossils
   for(i in 1:length(intervals.min)){
     if(k[i] > 0)
-      lk = lk + k[i] * log(lambda[i])
+      lk = lk + k[i] * log(psi[i])
   }
+
+  #print(lk)
 
   # extinction events
   for(i in 1:length(frs$sp)){
@@ -32,6 +46,8 @@ fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min){
     }
   }
 
+  #print(lk)
+
   # speciation events
   for(i in 1:length(frs$sp)){
     b = frs$bi[i]
@@ -40,6 +56,8 @@ fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min){
       lk = lk + log(lambda[j])
     }
   }
+
+  #print(lk)
 
   # range probabilities
   for(i in 1:length(frs$sp)){
@@ -54,6 +72,7 @@ fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min){
     lk = lk + log(g) + fbdSkylineQtildaLog(oint, o) - fbdSkylineQtildaLog(dint, d)
     lk = lk + fbdSkylineQLog(bint, b) - fbdSkylineQLog(oint, o)
 
+    #print(lk)
   }
 
   return(lk)
@@ -145,7 +164,7 @@ fbdSkylineP<-function(i, t){
 
   p1 = lambda[i] + mu[i] + psi[i]
   p2 = Ai * ( exp(Ai * (t - ti)) * (1 + Bi) - (1 - Bi) ) / ( exp(Ai * (t - ti)) * (1 + Bi) + (1 - Bi) )
-  p = (p1 - p2) / 2 * lambda[i]
+  p = (p1 - p2) / (2 * lambda[i])
 
   return(p)
 }
