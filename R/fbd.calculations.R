@@ -217,3 +217,19 @@ qt_heath<-function(t){
 
 # q=exp(fbdQfxnLog(told))/exp(fbdQfxnLog(tyoung)) - exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung))
 # exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung)) - exp(-(told-tyoung) * (lambda+mu+psi) )
+
+fbdQTildaFxnAlt<-function(t){
+
+  c1 = fbdC1fxn()
+  c2 = fbdC2fxn()
+
+  f1a = 4 * exp(-t * (lambda + mu + psi) * exp(-t * c1) )
+  f1b = (4 * exp(-t * c1) + (1 - c2*c2) * (1 - exp(-t * c1)) * (1 - exp(-t * c1)) )
+  f2a = (1 + c2) * exp(-t * c1) + (1 - c2)
+  f2b = (1 - c2) * exp(-t * c1) + (1 + c2)
+
+  qt = sqrt( (f1a/f1b) * (f2a/f2b)  )
+
+  return(qt)
+
+}
