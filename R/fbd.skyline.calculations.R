@@ -163,7 +163,9 @@ fbdSkylineP<-function(i, t){
   ti = intervals.min[i]
 
   p1 = lambda[i] + mu[i] + psi[i]
-  p2 = Ai * ( exp(Ai * (t - ti)) * (1 + Bi) - (1 - Bi) ) / ( exp(Ai * (t - ti)) * (1 + Bi) + (1 - Bi) )
+  # chi's paper
+  p2 = Ai * ( (1 + Bi - (1 - Bi) * exp(Ai * (ti -t))) / (1 + Bi + (1 - Bi) * exp(Ai * (ti -t))) )
+
   p = (p1 - p2) / (2 * lambda[i])
 
   return(p)
