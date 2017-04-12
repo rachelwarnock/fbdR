@@ -207,17 +207,24 @@ fbdSkylineQtilda<-function(i, t){
   return(qt)
 }
 
+# my original idea for this function didn't work
+# so this doesn't work for large numbers
 fbdSkylineQtildaLog<-function(i, t){
 
   Ai = fbdSkylineA(i)
   Bi = fbdSkylineB(i)
 
-  q1aLog = log(4) + (-t * (lambda[i] + mu[i] + psi[i]) ) + (-t * Ai)
+  #q1aLog = log(4) + (-t * (lambda[i] + mu[i] + psi[i]) ) + (-t * Ai)
+
+  q1a = 4 * exp(-t * (lambda[i] + mu[i] + psi[i]) ) * exp(-t * Ai)
   q1b = 4 * exp(-t * Ai) + (1 - Bi * Bi) * (1 - exp(-t * Ai)) *  (1 - exp(-t * Ai))
   q2a = (1 + Bi) * exp(-t * Ai) + (1 - Bi)
   q2b = (1 - Bi) * exp(-t * Ai) + (1 + Bi)
 
-  qt = 0.5 * (q1aLog - log(q1b) + log(q2a) - log(q2b))
+  #qt = 0.5 * (q1aLog - log(q1b) + log(q2a) - log(q2b))
+
+  qt = 0.5 * log( (q1a/q1b) * (q2a/q2b) )
+
   return(qt)
 }
 

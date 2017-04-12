@@ -141,6 +141,7 @@ fbdPfxn<-function(t){
   return(p)
 }
 
+# rho = 1
 fbdQTildaFxnLog<-function(t){
   t<-t
 
@@ -158,7 +159,6 @@ fbdQTildaFxnLog<-function(t){
   q = 0.5*f + log(rho)
 
   return(q)
-
 }
 
 fbdQfxnLog<-function(t){
@@ -215,21 +215,21 @@ qt_heath<-function(t){
   return(v)
 }
 
-# q=exp(fbdQfxnLog(told))/exp(fbdQfxnLog(tyoung)) - exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung))
-# exp(fbdQTildaFxnLog(told))/exp(fbdQTildaFxnLog(tyoung)) - exp(-(told-tyoung) * (lambda+mu+psi) )
-
-fbdQTildaFxnAlt<-function(t){
+fbdQTildaFxnLogAlt<-function(t){
 
   c1 = fbdC1fxn()
   c2 = fbdC2fxn()
 
-  f1a = 4 * exp(-t * (lambda + mu + psi) * exp(-t * c1) )
-  f1b = (4 * exp(-t * c1) + (1 - c2*c2) * (1 - exp(-t * c1)) * (1 - exp(-t * c1)) )
+  f1a = 4 * exp(-t * c1) * exp(-t * (lambda + mu + psi) )
+  f1b = 4 * exp(-t * c1) + (1 - c2*c2) * (1 - exp(-t * c1)) * (1 - exp(-t * c1))
+
   f2a = (1 + c2) * exp(-t * c1) + (1 - c2)
   f2b = (1 - c2) * exp(-t * c1) + (1 + c2)
 
-  qt = sqrt( (f1a/f1b) * (f2a/f2b)  )
+  qt = 0.5 * log( (f1a/f1b) * (f2a/f2b)  )
 
   return(qt)
-
 }
+
+
+
