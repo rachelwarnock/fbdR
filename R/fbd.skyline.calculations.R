@@ -180,14 +180,16 @@ fbdSkylineQ<-function(i, t){
   return(q)
 }
 
-# this does work but shouldn't
 fbdSkylineQLog<-function(i, t){
 
   Ai = fbdSkylineA(i)
   Bi = fbdSkylineB(i)
   ti = intervals.min[i]
 
-  q = (log(4) + (Ai * (t - ti))) - log(( exp(-Ai * (t - ti)) * (1 - Bi) + (1 + Bi) ) * ( exp(-Ai * (t - ti)) * (1 - Bi) + (1 + Bi) ) )
+  f1 = log(4) + (Ai * (ti - t))
+  f2 = 2 * (log( (exp(Ai*(ti - t)) * (1-Bi)) + (1+Bi) ))
+
+  q = f1 - f2;
 
   return(q)
 }
@@ -207,23 +209,17 @@ fbdSkylineQtilda<-function(i, t){
   return(qt)
 }
 
-# my original idea for this function didn't work
-# so this doesn't work for large numbers
 fbdSkylineQtildaLog<-function(i, t){
 
   Ai = fbdSkylineA(i)
   Bi = fbdSkylineB(i)
 
-  #q1aLog = log(4) + (-t * (lambda[i] + mu[i] + psi[i]) ) + (-t * Ai)
-
-  q1a = 4 * exp(-t * (lambda[i] + mu[i] + psi[i]) ) * exp(-t * Ai)
+  q1aLog = log(4) + (-t * (lambda[i] + mu[i] + psi[i]) ) + (-t * Ai)
   q1b = 4 * exp(-t * Ai) + (1 - Bi * Bi) * (1 - exp(-t * Ai)) *  (1 - exp(-t * Ai))
   q2a = (1 + Bi) * exp(-t * Ai) + (1 - Bi)
   q2b = (1 - Bi) * exp(-t * Ai) + (1 + Bi)
 
-  #qt = 0.5 * (q1aLog - log(q1b) + log(q2a) - log(q2b))
-
-  qt = 0.5 * log( (q1a/q1b) * (q2a/q2b) )
+  qt = 0.5 * (log( (1/q1b) * (q2a/q2b)  ) + (q1aLog))
 
   return(qt)
 }
