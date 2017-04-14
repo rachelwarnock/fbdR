@@ -164,7 +164,10 @@ fbdSkylineP<-function(i, t){
 
   p1 = lambda[i] + mu[i] + psi[i]
   # chi's paper
-  p2 = Ai * ( (1 + Bi - (1 - Bi) * exp(Ai * (ti -t))) / (1 + Bi + (1 - Bi) * exp(Ai * (ti -t))) )
+  p2 = Ai * ( (1 + Bi - (1 - Bi) * exp(Ai * (ti - t))) / (1 + Bi + (1 - Bi) * exp(Ai * (ti - t))) )
+
+  # sasha's paper
+  #p2 = Ai * ( ( exp(Ai * (t - ti)) * (1 + Bi) - (1 - Bi) ) / ( exp(Ai * (t - ti)) * (1 + Bi) + (1 - Bi) ) )
 
   p = (p1 - p2) / (2 * lambda[i])
 
