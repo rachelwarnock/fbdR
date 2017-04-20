@@ -84,9 +84,9 @@ recount.k<-function(fossils, intervals){
   for(i in 1:length(intervals)){
     k = c(k, 0)
   }
-  for(i in 1:length(f$h)){
-    if(f$h[i] != 0){
-      j = assign.interval(intervals, f$h[i])
+  for(i in 1:length(fossils$h)){
+    if(fossils$h[i] != 0){
+      j = assign.interval(intervals, fossils$h[i])
       k[j] = k[j] + 1
     }
   }
