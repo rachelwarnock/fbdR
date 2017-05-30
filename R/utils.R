@@ -1,13 +1,11 @@
-# Function to calculate node ages of a non-ultramteric tree written by Liam J. Revell
-#' @importFrom phytools nodeHeights
-n.ages<-function(tree) {
+# Function to calculate node ages of a non-ultramteric tree using the TreeSim function getx
+#' @importFrom TreeSim getx
+n.ages<-function(tree){
 
-  node.ages<-max(nodeHeights(tree))-nodeHeights(tree)[match(1:tree$Nnode+length(tree$tip),tree$edge[,1]),1]
-  names(node.ages)<-1:tree$Nnode+length(tree$tip)
+  node.ages <- getx(tree, sersampling = 1)[1:tree$Nnode+length(tree$tip)]
+  names(node.ages) <- 1:tree$Nnode+length(tree$tip)
 
   return(node.ages)
-
-  # EOF
 }
 
 # Identify parent nodes
@@ -19,6 +17,28 @@ ancestor<-function(edge,tree){
 
   return(parent)
   #eof
+}
+
+# Identify tips
+#
+# @param taxa Edge label.
+# @param tree Phylo object.
+# @return Boolean (true/false).
+# @examples
+# t<-ape::rtree(6)
+# is.tip(t$edge[,2][6],t)
+is.tip<-function(taxa,phylo){
+  
+  tree<-phylo
+  
+  if (length(which(tree$edge[,1]==taxa)) < 1) {
+    return(1)
+  }
+  else {
+    return(0)
+  }
+  
+  # EOF
 }
 
 # Identify the root
@@ -45,5 +65,16 @@ is.root<-function(edge,tree){
   #eof
 }
 
-
-
+# fetch immediate decendants
+descendants<-function(edge,tree){
+  edge<-edge
+  tree<-tree
+  
+  if(edge %in% tree$edge[,1])
+    decs<-tree$edge[,2][which(tree$edge[,1]==edge)]
+  else
+    decs = NULL
+  
+  return(decs)
+  #eof
+}
