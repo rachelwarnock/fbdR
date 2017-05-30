@@ -10,6 +10,7 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     ape,
-    coda
+    coda,
+    TreeSim
 RoxygenNote: 5.0.1
 
