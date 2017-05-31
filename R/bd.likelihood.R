@@ -126,7 +126,7 @@ bd.likelihood.est.extant.constr<-function(b,tree,nd,crown=FALSE,rho=1){
 ######## combined estimates
 
 #' @export
-est.bd.combined<-function(tree,frs,b=0.3,d=0.1,b.star=1,d.star=0.1,nd=0.1,constrained=FALSE,crown=FALSE,rho=1){
+est.bd.combined<-function(tree,frs,b=0.3,d=0.1,b.star=1,d.star=0.1,nd=0.1,constrained=FALSE,crown=FALSE,rho=1,constrained.p=3){
   b<-b # starting value
   d<-d # starting value
   b.star<-b.star # starting value
@@ -137,8 +137,10 @@ est.bd.combined<-function(tree,frs,b=0.3,d=0.1,b.star=1,d.star=0.1,nd=0.1,constr
 
   if(!constrained)
     est<-optim(c(b,d,b.star,d.star),bd.likelihood.est.combined,tree=tree,frs=frs,crown=crown,rho=rho,control=list(fnscale=-1,maxit=1000)) # fnscale=-1 tells the function to maximise
-  else
+  else if (constrained.p == 3)
     est<-optim(c(b,b.star,nd),bd.likelihood.est.combined.const,tree=tree,frs=frs,crown=crown,rho=rho,control=list(fnscale=-1,maxit=1000)) # fnscale=-1 tells the function to maximise
+  else if (constrained.p == 2)
+    est<-optim(c(b,d),bd.likelihood.est.combined.const.simple,tree=tree,frs=frs,crown=crown,rho=rho,control=list(fnscale=-1,maxit=1000)) # fnscale=-1 tells the function to maximise
 
   est$par = abs(est$par)
 
@@ -146,6 +148,7 @@ est.bd.combined<-function(tree,frs,b=0.3,d=0.1,b.star=1,d.star=0.1,nd=0.1,constr
   # eof
 }
 
+# l, m, l*, m*
 bd.likelihood.est.combined<-function(p,tree,frs,crown=FALSE,rho=1){
   b=abs(p[1])
   d=abs(p[2])
@@ -164,6 +167,7 @@ bd.likelihood.est.combined<-function(p,tree,frs,crown=FALSE,rho=1){
   return(lk)
 }
 
+# l, l*, d
 bd.likelihood.est.combined.const<-function(p,tree,frs,crown=FALSE,rho=1){
   b=abs(p[1])
   b.star=abs(p[2])
@@ -187,4 +191,23 @@ bd.likelihood.est.combined.const<-function(p,tree,frs,crown=FALSE,rho=1){
   return(lk)
 }
 
+# l, m
+bd.likelihood.est.combined.const.simple<-function(p,tree,frs,crown=FALSE,rho=1){
+  b=abs(p[1])
+  d=abs(p[2])
+  tree<-tree
+  frs<-frs
+  crown<-crown
+  rho<-rho
+
+  if(b < d)
+    return(-10^100)
+
+  b.star = b
+  d.star = d
+
+  lk = bd.probability.range(frs,b.star,d.star,crown=crown) + bd.probability.extant(tree,b,d,crown=crown,rho=rho)
+
+  return(lk)
+}
 
