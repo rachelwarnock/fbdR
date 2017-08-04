@@ -4,7 +4,7 @@
 \alias{interval.types.gf}
 \title{Categorize per interval taxon types using the gap-filler approach (Alroy, 2014)}
 \usage{
-interval.types.gf(fossils, basin.age, strata)
+interval.types.gf(fossils, basin.age, strata, return.useful = FALSE)
 }
 \arguments{
 \item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
@@ -12,6 +12,8 @@ interval.types.gf(fossils, basin.age, strata)
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
 \item{strata}{Number of stratigraphic horizons}
+
+\item{return.useful}{If TRUE return the branch labels used to define taxon types}
 }
 \value{
 dataframe of per interval taxon types.

@@ -43,9 +43,10 @@ first.last.appearances<-function(fossils) {
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
+#' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
 #' @export
-interval.types.bc<-function(fossils,basin.age,strata) {
+interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
@@ -56,6 +57,9 @@ interval.types.bc<-function(fossils,basin.age,strata) {
   horizons<-seq(s1, basin.age, length=strata)
 
   taxa.types<-data.frame(horizons=numeric(),NFl=numeric(),NFt=numeric(),Nbl=numeric(),Nbt=numeric()) # dataframe for taxon types
+
+  useful.un = c()
+  useful.bc = c()
 
   # during each horizon
   for(h in horizons){ # loop 1
@@ -69,6 +73,7 @@ interval.types.bc<-function(fossils,basin.age,strata) {
     for(i in 1:length(FAs[,1])) {
       fa=FAs[,2][i]
       la=FAs[,3][i]
+      id=FAs[,1][i]
 
       # define NFls (species originate & go extinct)
       # or NFts (top boundary crossers - species orginates)
@@ -78,24 +83,32 @@ interval.types.bc<-function(fossils,basin.age,strata) {
         # species is categorized as NFL
         if(fa==la) {
           NFls=c(NFls,FAs[,1][i])
+          useful.un = c(useful.un, id)
         }
         # else species is categorized as NFt
         else {
           NFts=c(NFts,FAs[,1][i])
+          useful.bc = c(useful.bc, id)
         }
       }
       # else define Nbl (bottom boundary crossers - species goes extinct)
       else if (la==h) {
         Nbls=c(Nbls,FAs[,1][i])
+        useful.bc = c(useful.bc, id)
       }
       # else define Nbt (bottom and top boundary crossers)
       else if ( (fa > h) & (la < h) ) {
         Nbts=c(Nbts,FAs[,1][i])
+        useful.bc = c(useful.bc, id)
       }
     }
     taxa.types<-rbind(taxa.types,data.frame(horizons=h,NFl=length(NFls),NFt=length(NFts),Nbl=length(Nbls),Nbt=length(Nbts)))
   }
-  return(taxa.types)
+  useful.un = c(useful.un, useful.bc)
+  if(return.useful)
+    return(list(useful.bc=useful.bc,useful.un=useful.un))
+  else
+    return(taxa.types)
   #eof
 }
 
@@ -114,9 +127,10 @@ interval.types.bc<-function(fossils,basin.age,strata) {
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
+#' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
 #' @export
-interval.types.3t<-function(fossils,basin.age,strata) {
+interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
@@ -127,6 +141,8 @@ interval.types.3t<-function(fossils,basin.age,strata) {
   horizons<-seq(s1, basin.age, length=strata)
 
   taxa.types<-data.frame(horizons=numeric(),Ns=numeric(),one_t=numeric(),two_t_a=numeric(),two_t_b=numeric(),three_t=numeric(),Pt=numeric()) # data fram for taxon types
+
+  useful = c()
 
   # during each horizon
   for(h in horizons){ # 1
@@ -156,27 +172,31 @@ interval.types.3t<-function(fossils,basin.age,strata) {
 
           # do I also exist in the next bin?
           if(any(i==as.character(hb))){
-            three_t=c(three_t,l)
+            three_t = c(three_t, l)
+            useful = c(useful, l)
           }
           else {
-            two_t_a=c(two_t_a,l)
+            two_t_a = c(two_t_a,l)
+            useful = c(useful, l)
           }
         }
         # do I exist in the next bin but not the one before?
         else if (any(i==as.character(hb))){
-          two_t_b=c(two_t_b,l)
+          two_t_b = c(two_t_b, l)
+          useful = c(useful, l)
         }
 
         # otherwise record taxon as one timer
         else {
-          one_t=c(one_t,l)
+          one_t=c(one_t, l)
         }
 
       }
 
       #else, do I exist in the bin before and after?
       else if( (any(i==as.character(ha))) & (any(i==as.character(hb))) ){
-        Pt=c(Pt,l)
+        Pt=c(Pt, l)
+        useful = c(useful, l)
       }
 
     } # 2
@@ -187,7 +207,10 @@ interval.types.3t<-function(fossils,basin.age,strata) {
     taxa.types<-rbind(taxa.types,data.frame(horizons=h,Ns=length(Ns),one_t=length(one_t),two_t_a=length(two_t_a),two_t_b=length(two_t_b),three_t=length(three_t),Pt=length(Pt)))
 
   } # 1
-  return(taxa.types)
+  if(return.useful)
+    return(useful)
+  else
+    return(taxa.types)
   #eof
 }
 
@@ -207,9 +230,10 @@ interval.types.3t<-function(fossils,basin.age,strata) {
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic horizons
+#' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
 #' @export
-interval.types.gf<-function(fossils,basin.age,strata) {
+interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
   basin.age<-basin.age
   strata<-strata
@@ -220,6 +244,8 @@ interval.types.gf<-function(fossils,basin.age,strata) {
   horizons<-seq(s1, basin.age, length=strata)
 
   taxa.types<-data.frame(horizons=numeric(),Ns=numeric(),one_t=numeric(),two_t_a=numeric(),two_t_b=numeric(),three_t=numeric(),Pt=numeric(),gf_a=numeric(),gf_b=numeric()) # data fram for taxon types
+
+  useful = c()
 
   # during each horizon
   for(h in horizons){ # 1
@@ -253,20 +279,23 @@ interval.types.gf<-function(fossils,basin.age,strata) {
 
           # do I also exist in the next bin?
           if(any(i==as.character(hb))){
-            three_t=c(three_t,l)
+            three_t = c(three_t, l)
+            useful = c(useful, l)
           }
           else {
-            two_t_a=c(two_t_a,l)
+            two_t_a = c(two_t_a,l)
+            useful = c(useful, l)
             if(any(i==as.character(hb2))){
-              gf_a=c(gf_a,l)
+              gf_a = c(gf_a,l)
             }
           }
         }
         # do I exist in the next bin but not the one before?
         else if (any(i==as.character(hb))){
-          two_t_b=c(two_t_b,l)
+          two_t_b = c(two_t_b,l)
+          useful = c(useful, l)
           if(any(i==as.character(ha2))){
-            gf_b=c(gf_b,l)
+            gf_b = c(gf_b,l)
           }
         }
 
@@ -279,15 +308,18 @@ interval.types.gf<-function(fossils,basin.age,strata) {
 
       #else, do I exist in the bin before and after?
       else if( (any(i==as.character(ha))) & (any(i==as.character(hb))) ){
-        Pt=c(Pt,l)
+        Pt = c(Pt,l)
+        useful = c(useful, l)
       }
 
       # define gap fillers a and b
       else if ( (any(i==as.character(ha))) & (any(i==as.character(hb2))) ){
-        gf_a=c(gf_a,l)
+        gf_a = c(gf_a,l)
+        useful = c(useful, l)
       }
       else if ( (any(i==as.character(hb))) & (any(i==as.character(ha2))) ){
-        gf_b=c(gf_b,l)
+        gf_b = c(gf_b,l)
+        useful = c(useful, l)
       }
 
     } # 2
@@ -298,7 +330,10 @@ interval.types.gf<-function(fossils,basin.age,strata) {
     taxa.types<-rbind(taxa.types,data.frame(horizons=h,Ns=length(Ns),one_t=length(one_t),two_t_a=length(two_t_a),two_t_b=length(two_t_b),three_t=length(three_t),Pt=length(Pt),gf_a=length(gf_a),gf_b=length(gf_b)))
 
   } # 1
-  return(taxa.types)
+  if(return.useful)
+    return(useful)
+  else
+    return(taxa.types)
 }
 
 ## Calculate speciation and extinction rates

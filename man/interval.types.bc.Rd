@@ -4,7 +4,7 @@
 \alias{interval.types.bc}
 \title{Categorize per interval taxon types using the boundary crosser approach}
 \usage{
-interval.types.bc(fossils, basin.age, strata)
+interval.types.bc(fossils, basin.age, strata, return.useful = FALSE)
 }
 \arguments{
 \item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
@@ -12,6 +12,8 @@ interval.types.bc(fossils, basin.age, strata)
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
 \item{strata}{Number of stratigraphic horizons}
+
+\item{return.useful}{If TRUE return the branch labels used to define taxon types}
 }
 \value{
 dataframe of per interval taxon types.
