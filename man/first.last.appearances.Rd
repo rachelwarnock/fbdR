@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.R
 \name{first.last.appearances}
 \alias{first.last.appearances}
-\title{Calculate out first and last appearances}
+\title{Work out first and last appearances}
 \usage{
 first.last.appearances(fossils)
 }
@@ -10,9 +10,17 @@ first.last.appearances(fossils)
 \item{fossils}{Dataframe of sampled fossils (sp = edge labels. h = ages.)}
 }
 \value{
-Function returns the first and last appearances for each lineage, represented by the max secure age of the sampling horizon.
+Dataframe containing the first and last appearances for each lineage, represented by the max secure age of the sampling horizon.
 }
 \description{
-Calculate out first and last appearances
+Work out first and last appearances
+}
+\examples{
+# simulate tree
+t = ape::rtree(10)
+# simulate fossils
+f = FossilSim::sim.fossils.poisson(t, 1)
+# work out first & last appearances
+first.last.appearances(f)
 }
 

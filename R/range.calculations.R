@@ -1,7 +1,14 @@
-#' Calculate out first and last appearances
+#' Work out first and last appearances
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
-#' @return Function returns the first and last appearances for each lineage, represented by the max secure age of the sampling horizon.
+#' @return Dataframe containing the first and last appearances for each lineage, represented by the max secure age of the sampling horizon.
+#' @examples
+#' # simulate tree
+#' t = ape::rtree(10)
+#' # simulate fossils
+#' f = FossilSim::sim.fossils.poisson(t, 1)
+#' # work out first & last appearances
+#' first.last.appearances(f)
 #' @export
 first.last.appearances<-function(fossils) {
   fossils<-fossils
@@ -29,9 +36,9 @@ first.last.appearances<-function(fossils) {
   #eof
 }
 
-## Categorize interval types
+## Categorise interval types
 
-#' Categorize per interval taxon types using the boundary crosser approach
+#' Categorise per interval taxon types using boundary crosser categories
 #'
 #' @details
 #' Taxa types are detailed in Foote (2000). \cr
@@ -42,9 +49,20 @@ first.last.appearances<-function(fossils) {
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param strata Number of stratigraphic horizons
+#' @param strata Number of stratigraphic intervals
 #' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
+#' @examples
+#' # simulate tree & fossils
+#' t = ape::rtree(10)
+#' ba = FossilSim::basin.age(t)
+#' f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # categorise interval types
+#' interval.types.bc(f, ba, 10)
 #' @export
 interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
@@ -80,12 +98,12 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
       # if the first appearance is equivalent to the current horizon:
       if(fa==h) {
         # and the first appearance is equivalent to the last appearance
-        # species is categorized as NFL
+        # species is categorised as NFL
         if(fa==la) {
           NFls=c(NFls,FAs[,1][i])
           useful.un = c(useful.un, id)
         }
-        # else species is categorized as NFt
+        # else species is categorised as NFt
         else {
           NFts=c(NFts,FAs[,1][i])
           useful.bc = c(useful.bc, id)
@@ -112,11 +130,11 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
   #eof
 }
 
-#' Categorize per interval taxon types using the three-timer approach (Alroy, 2008)
+#' Categorise per interval taxon types using the three-timer approach (Alroy, 2008)
 #'
 #' @details
-#' Taxa types are detailed in Alroy (2000) and Alroy (2014) \cr
-#' 1. taxa sampled at all in a focal bin (Ns)
+#' Taxa types are detailed in Alroy (2008) and Alroy (2014) \cr
+#' 1. taxa sampled at all in a focal bin (Ns) \cr
 #' 2. taxa sampled in a bin but not immediately before or after (one-timers, or 1t) \cr
 #' 3a. taxa sampled immediately before and within the ith bin (two-timers, or 2ti) * referred to as two_t_a \cr
 #' 3b. or within and immediately after the ith bin (2ti+1) * referred to as two_t_b \cr
@@ -126,9 +144,20 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param strata Number of stratigraphic horizons
+#' @param strata Number of stratigraphic interval
 #' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
+#' @examples
+#' # simulate tree & fossils
+#' t = ape::rtree(10)
+#' ba = FossilSim::basin.age(t)
+#' f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # categorise interval types
+#' interval.types.3t(f, ba, 10)
 #' @export
 interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
@@ -214,7 +243,7 @@ interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
   #eof
 }
 
-#' Categorize per interval taxon types using the gap-filler approach (Alroy, 2014)
+#' Categorise per interval taxon types using the gap-filler approach (Alroy, 2014)
 #'
 #' @details
 #' Taxa types are detailed in Alroy (2014) \cr
@@ -229,9 +258,20 @@ interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param strata Number of stratigraphic horizons
+#' @param strata Number of stratigraphic intervals
 #' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
+#' @examples
+#' # simulate tree & fossils
+#' t = ape::rtree(10)
+#' ba = FossilSim::basin.age(t)
+#' f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # categorise interval types
+#' interval.types.gf(f, ba, 10)
 #' @export
 interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
@@ -342,11 +382,22 @@ interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param strata Number of stratigraphic horizons
+#' @param strata Number of stratigraphic intervals
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
-#' Note this approach cannot estimate rates for the first interval.
+#' Note this approach does not return rates for the first interval.
+#' @examples
+#' # simulate tree & fossils
+#' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+#' ba = FossilSim::basin.age(t)
+#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # categorise interval types
+#' boundary.crosser.rates(f, ba, 20)
 #' @export
 boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -429,10 +480,21 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param strata Number of stratigraphic horizons
+#' @param strata Number of stratigraphic intervals
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
+#' @examples
+#' # simulate tree & fossils
+#' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+#' ba = FossilSim::basin.age(t)
+#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # categorise interval types
+#' uncorrected.rates(f, ba, 20)
 #' @export
 uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -510,11 +572,22 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param strata Number of stratigraphic horizons
+#' @param strata Number of stratigraphic intervals
 #' @param continuous If TRUE calculate continuous rates
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
-#' Note this approach cannot estimate rates for the first interval.
+#' Note this approach does not return rates for the first interval.
+#' @examples
+#' # simulate tree & fossils
+#' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+#' ba = FossilSim::basin.age(t)
+#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # categorise interval types
+#' three.timer.rates(f, ba, 20)
 #' @export
 three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -616,10 +689,21 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #'
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
-#' @param strata Number of stratigraphic horizons
+#' @param strata Number of stratigraphic intervals
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
-#' Note this approach cannot estimate specation for the first or second interval and cannot estimate extinction for the first or last interval.
+#' Note this approach does not return specation rates for the first or second interval and extinction rate for the first or last interval.
+#' @examples
+#' # simulate tree & fossils
+#' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+#' ba = FossilSim::basin.age(t)
+#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # categorise interval types
+#' gap.filler.rates(f, ba, 20)
 #' @export
 gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   fossils<-fossils

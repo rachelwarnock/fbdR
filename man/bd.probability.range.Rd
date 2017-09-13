@@ -12,11 +12,27 @@ bd.probability.range(frs, b, d, crown = FALSE)
 \item{b}{Rate of speciation}
 
 \item{d}{Rate of extinction}
+
+\item{crown}{If TRUE assume the process begins at the first speciation event and not the origin (default = FALSE)}
 }
 \value{
 Log likelihood
 }
 \description{
-This is the underlying birth-death process used in Silvestro et al. 2014, eq. 9
+Calculate the probabilty of speciaton and extinction rates for a given set of stratigraphic ranges
+}
+\examples{
+# simulate tree & assume complete sampling
+t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+# add symmetric speciation events & generate fossil range dataframe
+f = 0.5
+ages <- FossilSim::mixed.ages(t, f, root.edge = TRUE)
+# add anagenic speciation events
+lambda.a = 0.1
+frs <- FossilSim::anagenic.species(ages, lambda.a)
+# calculate birth-death probability
+birth = 1
+death = 0.1
+bd.probability.range(frs, birth, death)
 }
 

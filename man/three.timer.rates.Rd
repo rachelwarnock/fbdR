@@ -12,7 +12,7 @@ three.timer.rates(fossils, basin.age, strata, continuous = T,
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{strata}{Number of stratigraphic horizons}
+\item{strata}{Number of stratigraphic intervals}
 
 \item{continuous}{If TRUE calculate continuous rates}
 
@@ -20,7 +20,7 @@ three.timer.rates(fossils, basin.age, strata, continuous = T,
 }
 \value{
 named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
-Note this approach cannot estimate rates for the first interval.
+Note this approach does not return rates for the first interval.
 }
 \description{
 Calculate speciation and extinction rates using the three-timer approach
@@ -29,5 +29,17 @@ Calculate speciation and extinction rates using the three-timer approach
 The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
 The per-interval speciation rate lamda = log(2ti+1/3t) + log(Ps) \cr
 The per-interval extinction rate mu = log(2ti/3t) + log(Ps) \cr
+}
+\examples{
+# simulate tree & fossils
+t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+ba = FossilSim::basin.age(t)
+f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+# add extant occurrences
+f = FossilSim::add.extant.occ(t, f)
+# asymmetric taxon mapping
+f = FossilSim::asymmetric.fossil.mapping(t, f)
+# categorise interval types
+three.timer.rates(f, ba, 20)
 }
 

@@ -1,13 +1,26 @@
 
-
 #' Birth-death probability (Keiding, 1975)
 #'
-#' This is the underlying birth-death process used in Silvestro et al. 2014, eq. 9
+#' Calculate the probabilty of speciaton and extinction rates for a given set of stratigraphic ranges
 #'
 #' @param frs Dataframe of species ranges
 #' @param b Rate of speciation
 #' @param d Rate of extinction
+#' @param crown If TRUE assume the process begins at the first speciation event and not the origin (default = FALSE)
 #' @return Log likelihood
+#' @examples
+#' # simulate tree & assume complete sampling
+#' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+#' # add symmetric speciation events & generate fossil range dataframe
+#' f = 0.5
+#' ages <- FossilSim::mixed.ages(t, f, root.edge = TRUE)
+#' # add anagenic speciation events
+#' lambda.a = 0.1
+#' frs <- FossilSim::anagenic.species(ages, lambda.a)
+#' # calculate birth-death probability
+#' birth = 1
+#' death = 0.1
+#' bd.probability.range(frs, birth, death)
 #' @export
 bd.probability.range<-function(frs,b,d,crown=FALSE){
   frs<-frs
@@ -27,7 +40,7 @@ bd.probability.range<-function(frs,b,d,crown=FALSE){
   D = length(which(frs$end!=0))
   S = sum(frs$start-frs$end)
 
-  #likelihood = (lambda^B) * (mu^D) * exp(-(lambda+mu)*S)
+  # also see Silvestro et al. 2014, eq. 9
   ll = (B * log(b)) + (D * log(d)) + (-(b + d) * S)
 
   return(ll)
@@ -39,12 +52,19 @@ bd.probability.range<-function(frs,b,d,crown=FALSE){
 #' Probability of extant species phylogeny conditioned on the origin (Stadler, 2010, eq. 2)
 #' or the crown (crown = T) (Stadler, 2010, eq. 5)
 #'
-#' @param tree Phylo object of extant taxa only
+#' @param tree Phylo object of extant taxa (the function will remove any extinct taxa prior to calculating the likelihood)
 #' @param b Rate of speciation (branching)
-#' @param d Rate of extinction (branch termination)
-#' @param rho Extant species sampling
-#' @param crown Boolean stating whether the process is conditioned on the crown (default = F)
+#' @param d Rate of extinction (branch termination). Must be < b
+#' @param rho Extant species sampling probability
+#' @param crown If TRUE the process is conditioned on the crown (default = F)
 #' @return Log likelihood
+#' @examples
+#' # simulate tree
+#' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+#' # calculate birth-death probability
+#' birth = 1
+#' death = 0.1
+#' bd.probability.extant(t, birth, death)
 #' @export
 bd.probability.extant<-function(tree,b,d,rho=1,mpfr=FALSE,crown=FALSE){
   tree<-tree

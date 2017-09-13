@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.R
 \name{interval.types.3t}
 \alias{interval.types.3t}
-\title{Categorize per interval taxon types using the three-timer approach (Alroy, 2008)}
+\title{Categorise per interval taxon types using the three-timer approach (Alroy, 2008)}
 \usage{
 interval.types.3t(fossils, basin.age, strata, return.useful = FALSE)
 }
@@ -11,7 +11,7 @@ interval.types.3t(fossils, basin.age, strata, return.useful = FALSE)
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{strata}{Number of stratigraphic horizons}
+\item{strata}{Number of stratigraphic interval}
 
 \item{return.useful}{If TRUE return the branch labels used to define taxon types}
 }
@@ -19,16 +19,28 @@ interval.types.3t(fossils, basin.age, strata, return.useful = FALSE)
 dataframe of per interval taxon types.
 }
 \description{
-Categorize per interval taxon types using the three-timer approach (Alroy, 2008)
+Categorise per interval taxon types using the three-timer approach (Alroy, 2008)
 }
 \details{
-Taxa types are detailed in Alroy (2000) and Alroy (2014) \cr
-1. taxa sampled at all in a focal bin (Ns)
+Taxa types are detailed in Alroy (2008) and Alroy (2014) \cr
+1. taxa sampled at all in a focal bin (Ns) \cr
 2. taxa sampled in a bin but not immediately before or after (one-timers, or 1t) \cr
 3a. taxa sampled immediately before and within the ith bin (two-timers, or 2ti) * referred to as two_t_a \cr
 3b. or within and immediately after the ith bin (2ti+1) * referred to as two_t_b \cr
 4. taxa sampled in three consecutive bins (three-timers, or 3t) \cr
 5. taxa sampled before and after but not within a bin (part-timers, or Pt) \cr
 n.b. all three timers are also two timers \cr
+}
+\examples{
+# simulate tree & fossils
+t = ape::rtree(10)
+ba = FossilSim::basin.age(t)
+f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+# add extant occurrences
+f = FossilSim::add.extant.occ(t, f)
+# asymmetric taxon mapping
+f = FossilSim::asymmetric.fossil.mapping(t, f)
+# categorise interval types
+interval.types.3t(f, ba, 10)
 }
 

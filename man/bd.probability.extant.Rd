@@ -7,15 +7,15 @@
 bd.probability.extant(tree, b, d, rho = 1, mpfr = FALSE, crown = FALSE)
 }
 \arguments{
-\item{tree}{Phylo object of extant taxa only}
+\item{tree}{Phylo object of extant taxa (the function will remove any extinct taxa prior to calculating the likelihood)}
 
 \item{b}{Rate of speciation (branching)}
 
-\item{d}{Rate of extinction (branch termination)}
+\item{d}{Rate of extinction (branch termination). Must be < b}
 
-\item{rho}{Extant species sampling}
+\item{rho}{Extant species sampling probability}
 
-\item{crown}{Boolean stating whether the process is conditioned on the crown (default = F)}
+\item{crown}{If TRUE the process is conditioned on the crown (default = F)}
 }
 \value{
 Log likelihood
@@ -23,5 +23,13 @@ Log likelihood
 \description{
 Probability of extant species phylogeny conditioned on the origin (Stadler, 2010, eq. 2)
 or the crown (crown = T) (Stadler, 2010, eq. 5)
+}
+\examples{
+# simulate tree
+t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+# calculate birth-death probability
+birth = 1
+death = 0.1
+bd.probability.extant(t, birth, death)
 }
 

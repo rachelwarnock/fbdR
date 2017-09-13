@@ -1,5 +1,7 @@
 
+
 #' @export
+#' @rdname fbd.probability
 recount.gamma<-function(frs){
   #frs<-fossilRanges
   frs<-frs
@@ -27,7 +29,9 @@ recount.gamma<-function(frs){
   #eof
 }
 
+
 #' @export
+#' @rdname fbd.probability
 recount.extant<-function(frs){
   #frs<-fossilRanges
   frs<-frs
@@ -47,6 +51,38 @@ recount.extant<-function(frs){
 
 #### probability functions
 
+#' FBD probability
+#'
+#' Calculate the probabilty of speciaton, extinction and sampling rates for a given set of stratigraphic ranges
+#'
+#' @param frs Dataframe of species ranges
+#' @param b Rate of speciation
+#' @param d Rate of extinction
+#' @param s Rate of sampling
+#' @param k Number of fossils
+#' @return Log likelihood
+#'
+#' @examples
+#' # simulate tree & fossils
+#' birth = 1
+#' death = 0.1
+#' t = TreeSim::sim.bd.taxa(100, 1, birth, death)[[1]]
+#' psi = 1
+#' f = FossilSim::sim.fossils.poisson(t, psi)
+#' k = length(f$h)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # calculate range attachment times given incomplete sampling
+#' frs = FossilSim::attachment.times(t,f)
+#' # rename range data headers
+#' names(frs)[2]<-"bi"
+#' names(frs)[3]<-"di"
+#' names(frs)[4]<-"oi"
+#' frs = recount.extant(frs)
+#' frs = recount.gamma(frs)
+#' fbd.probability(frs, birth, death, psi, k)
 #' @export
 fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F,mpfr=F){
   frs<-frs

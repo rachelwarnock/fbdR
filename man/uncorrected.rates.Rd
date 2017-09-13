@@ -12,7 +12,7 @@ uncorrected.rates(fossils, basin.age, strata, continuous = T,
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{strata}{Number of stratigraphic horizons}
+\item{strata}{Number of stratigraphic intervals}
 
 \item{continuous}{If TRUE calculate continuous rates}
 
@@ -23,5 +23,17 @@ named list with the overall speciation rate, overall extinction rate and a dataf
 }
 \description{
 Calculate speciation and extinction rates using the uncorrected approach
+}
+\examples{
+# simulate tree & fossils
+t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+ba = FossilSim::basin.age(t)
+f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+# add extant occurrences
+f = FossilSim::add.extant.occ(t, f)
+# asymmetric taxon mapping
+f = FossilSim::asymmetric.fossil.mapping(t, f)
+# categorise interval types
+uncorrected.rates(f, ba, 20)
 }
 

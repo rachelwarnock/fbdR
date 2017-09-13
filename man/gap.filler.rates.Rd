@@ -11,15 +11,27 @@ gap.filler.rates(fossils, basin.age, strata, return.intervals = F)
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{strata}{Number of stratigraphic horizons}
+\item{strata}{Number of stratigraphic intervals}
 
 \item{return.intervals}{If TRUE return per interval estimates}
 }
 \value{
 named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
-Note this approach cannot estimate specation for the first or second interval and cannot estimate extinction for the first or last interval.
+Note this approach does not return specation rates for the first or second interval and extinction rate for the first or last interval.
 }
 \description{
 Calculate speciation and extinction rates using the gap-filler approach
+}
+\examples{
+# simulate tree & fossils
+t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
+ba = FossilSim::basin.age(t)
+f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+# add extant occurrences
+f = FossilSim::add.extant.occ(t, f)
+# asymmetric taxon mapping
+f = FossilSim::asymmetric.fossil.mapping(t, f)
+# categorise interval types
+gap.filler.rates(f, ba, 20)
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.R
 \name{interval.types.gf}
 \alias{interval.types.gf}
-\title{Categorize per interval taxon types using the gap-filler approach (Alroy, 2014)}
+\title{Categorise per interval taxon types using the gap-filler approach (Alroy, 2014)}
 \usage{
 interval.types.gf(fossils, basin.age, strata, return.useful = FALSE)
 }
@@ -11,7 +11,7 @@ interval.types.gf(fossils, basin.age, strata, return.useful = FALSE)
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{strata}{Number of stratigraphic horizons}
+\item{strata}{Number of stratigraphic intervals}
 
 \item{return.useful}{If TRUE return the branch labels used to define taxon types}
 }
@@ -19,7 +19,7 @@ interval.types.gf(fossils, basin.age, strata, return.useful = FALSE)
 dataframe of per interval taxon types.
 }
 \description{
-Categorize per interval taxon types using the gap-filler approach (Alroy, 2014)
+Categorise per interval taxon types using the gap-filler approach (Alroy, 2014)
 }
 \details{
 Taxa types are detailed in Alroy (2014) \cr
@@ -31,5 +31,17 @@ Taxa types are detailed in Alroy (2014) \cr
 5. taxa sampled before and after but not within a bin (part-timers, or Pt) \cr
 6. taxa sampled in i − 1 and i + 2 but not i + 1 (gap-fillers, a) * referred to as gf_a # may also be sampled in i \cr
 7. taxa sampled in i + 1 and i - 2 but not i - 1 (gap-fillers, b) * referred to as gf_b # may also be sampled in i \cr
+}
+\examples{
+# simulate tree & fossils
+t = ape::rtree(10)
+ba = FossilSim::basin.age(t)
+f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+# add extant occurrences
+f = FossilSim::add.extant.occ(t, f)
+# asymmetric taxon mapping
+f = FossilSim::asymmetric.fossil.mapping(t, f)
+# categorise interval types
+interval.types.gf(f, ba, 10)
 }
 

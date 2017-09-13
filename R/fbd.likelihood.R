@@ -1,4 +1,40 @@
 
+#' Maximum likelihood estimation of birth, death and sampling rates for a given set of stratigraphic ranges under the FBD model
+#'
+#' @param frs Dataframe of species ranges including first birth and death time, first appearance, number of co-existing lineages and extant indicator
+#' @param b Initial value for birth rate
+#' @param d Initial value for death rate
+#' @param s Initial value for sampling rate
+#' @param k Number of fossils
+#' @param est.b If TRUE estimate birth rate, else fix birth rate to the initial value (default = T)
+#' @param est.d If TRUE estimate death rate, else fix death rate to the initial value (default = T)
+#' @param est.s If TRUE estimate sampling rate, else fix death sampling to the initial value (default = F)
+#' @param complete If TRUE assume complete species sampling  (default = F)
+#'
+#' @return Named list including parameter estimates and likelihood
+#'
+#' @examples
+#' # simulate tree & fossils
+#' birth = 1
+#' death = 0.1
+#' t = TreeSim::sim.bd.taxa(100, 1, birth, death)[[1]]
+#' psi = 1
+#' f = FossilSim::sim.fossils.poisson(t, psi)
+#' k = length(f$h)
+#' # add extant occurrences
+#' f = FossilSim::add.extant.occ(t, f)
+#' # asymmetric taxon mapping
+#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # calculate range attachment times given incomplete sampling
+#' frs = FossilSim::attachment.times(t,f)
+#' # rename range data headers
+#' names(frs)[2]<-"bi"
+#' names(frs)[3]<-"di"
+#' names(frs)[4]<-"oi"
+#' frs = recount.extant(frs)
+#' frs = recount.gamma(frs)
+#' # estimate
+#' fbd.likelihood.est(birth, death, psi, k, frs)
 #' @export
 fbd.likelihood.est<-function(b,d,s,k,frs,est.b=T,est.d=T,est.s=F,lower.b=0.001,lower.d=0.001,lower.s=0.001,upper.b=10,upper.d=10,upper.s=100,complete=F){
   b<-b # fixed or starting value

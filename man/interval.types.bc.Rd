@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.R
 \name{interval.types.bc}
 \alias{interval.types.bc}
-\title{Categorize per interval taxon types using the boundary crosser approach}
+\title{Categorise per interval taxon types using boundary crosser categories}
 \usage{
 interval.types.bc(fossils, basin.age, strata, return.useful = FALSE)
 }
@@ -11,7 +11,7 @@ interval.types.bc(fossils, basin.age, strata, return.useful = FALSE)
 
 \item{basin.age}{Maximum age of the oldest stratigraphic interval}
 
-\item{strata}{Number of stratigraphic horizons}
+\item{strata}{Number of stratigraphic intervals}
 
 \item{return.useful}{If TRUE return the branch labels used to define taxon types}
 }
@@ -19,7 +19,7 @@ interval.types.bc(fossils, basin.age, strata, return.useful = FALSE)
 dataframe of per interval taxon types.
 }
 \description{
-Categorize per interval taxon types using the boundary crosser approach
+Categorise per interval taxon types using boundary crosser categories
 }
 \details{
 Taxa types are detailed in Foote (2000). \cr
@@ -27,5 +27,17 @@ Nbt - bottom and top boundary crossers \cr
 Nbl - bottom boundary crossers only (e.g. species goes extinct) \cr
 NFt - top boundary crossers only (e.g. species originates) \cr
 NFl - species originates and becomes extinct during the same interval \cr
+}
+\examples{
+# simulate tree & fossils
+t = ape::rtree(10)
+ba = FossilSim::basin.age(t)
+f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+# add extant occurrences
+f = FossilSim::add.extant.occ(t, f)
+# asymmetric taxon mapping
+f = FossilSim::asymmetric.fossil.mapping(t, f)
+# categorise interval types
+interval.types.bc(f, ba, 10)
 }
 
