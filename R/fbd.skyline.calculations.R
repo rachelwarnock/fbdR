@@ -1,4 +1,8 @@
 
+#' FBD skyline probability
+#'
+#' WARNING: FUNCTION RETURNS THE INCORRECT PROBABILITY
+#'
 #' @export
 fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min,mpfr=F){
   frs<-frs
@@ -79,6 +83,7 @@ fbdskyline.probability<-function(frs,b,d,s,rho,k,int.min,mpfr=F){
 }
 
 #' @export
+#' @rdname fbdskyline.probability
 recount.k<-function(fossils, intervals){
   k = c()
   for(i in 1:length(intervals)){
@@ -94,6 +99,7 @@ recount.k<-function(fossils, intervals){
 }
 
 #' @export
+#' @rdname fbdskyline.probability
 reassign.intervals<-function(frs,intervals){
   frs = cbind(frs, bint=-1, dint=-1, oint=-1)
   # birth
