@@ -8,6 +8,10 @@
 #' @param d Rate of extinction
 #' @param crown If TRUE assume the process begins at the first speciation event and not the origin (default = FALSE)
 #' @return Log likelihood
+#'
+#' @references
+#' Keiding, N. 1975. Maximum likelihood estimation in the birth-death process. Annals of Statistics 3: 363-372.
+#'
 #' @examples
 #' # simulate tree & assume complete sampling
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
@@ -47,10 +51,10 @@ bd.probability.range<-function(frs,b,d,crown=FALSE){
 
 }
 
-#' Birth-death probability (Stadler, 2010)
+#' Birth-death probability (Stadler, 2012)
 #'
-#' Probability of extant species phylogeny conditioned on the origin (Stadler, 2010, eq. 2)
-#' or the crown (crown = T) (Stadler, 2010, eq. 5)
+#' Probability of extant species phylogeny conditioned on the origin (Stadler, 2012, eq. 2)
+#' or the crown (crown = T) (Stadler, 2012, eq. 5)
 #'
 #' @param tree Phylo object of extant taxa (the function will remove any extinct taxa prior to calculating the likelihood)
 #' @param b Rate of speciation (branching)
@@ -58,6 +62,10 @@ bd.probability.range<-function(frs,b,d,crown=FALSE){
 #' @param rho Extant species sampling probability
 #' @param crown If TRUE the process is conditioned on the crown (default = F)
 #' @return Log likelihood
+#'
+#' @references
+#' Stadler, T. 2012. How can we improve accuracy of macroevolutionary rate estimates? Systematic Biology 62: 321-329.
+#'
 #' @examples
 #' # simulate tree
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]

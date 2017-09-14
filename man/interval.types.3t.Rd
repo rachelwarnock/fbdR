@@ -43,4 +43,7 @@ f = FossilSim::asymmetric.fossil.mapping(t, f)
 # categorise interval types
 interval.types.3t(f, ba, 10)
 }
+\references{
+Alroy, J et al. 2008. Dynamics of origination and extinction in the marine fossil record. PNAS 105: 11536-11542.
+}
 

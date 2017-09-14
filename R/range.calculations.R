@@ -52,6 +52,10 @@ first.last.appearances<-function(fossils) {
 #' @param strata Number of stratigraphic intervals
 #' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
+#'
+#' @references
+#' Foote, M. 2000. Origination and extinction components of taxonomic diversity: General problems. Paleobiology 26: 74-102.
+#'
 #' @examples
 #' # simulate tree & fossils
 #' t = ape::rtree(10)
@@ -147,6 +151,10 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #' @param strata Number of stratigraphic interval
 #' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
+#'
+#' @references
+#' Alroy, J et al. 2008. Dynamics of origination and extinction in the marine fossil record. PNAS 105: 11536-11542.
+#'
 #' @examples
 #' # simulate tree & fossils
 #' t = ape::rtree(10)
@@ -261,6 +269,10 @@ interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #' @param strata Number of stratigraphic intervals
 #' @param return.useful If TRUE return the branch labels used to define taxon types
 #' @return dataframe of per interval taxon types.
+#'
+#' @references
+#' Alroy, J 2014. Accurate and precise estimates of origination and extinction rates. Paleobiology 40: 374-397.
+#'
 #' @examples
 #' # simulate tree & fossils
 #' t = ape::rtree(10)
@@ -387,6 +399,10 @@ interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' Note this approach does not return rates for the first interval.
+#'
+#' @references
+#' Foote, M. 2000. Origination and extinction components of taxonomic diversity: General problems. Paleobiology 26: 74-102.
+#'
 #' @examples
 #' # simulate tree & fossils
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
@@ -577,6 +593,11 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' Note this approach does not return rates for the first interval.
+#'
+#' @references
+#' Alroy, J et al. 2008. Dynamics of origination and extinction in the marine fossil record. PNAS 105: 11536-11542. \cr
+#' Alroy, J 2014. Accurate and precise estimates of origination and extinction rates. Paleobiology 40: 374-397.
+#'
 #' @examples
 #' # simulate tree & fossils
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
@@ -693,6 +714,10 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' Note this approach does not return specation rates for the first or second interval and extinction rate for the first or last interval.
+#'
+#' @references
+#' Alroy, J 2014. Accurate and precise estimates of origination and extinction rates. Paleobiology 40: 374-397.
+#'
 #' @examples
 #' # simulate tree & fossils
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]

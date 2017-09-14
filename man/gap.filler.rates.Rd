@@ -34,4 +34,7 @@ f = FossilSim::asymmetric.fossil.mapping(t, f)
 # categorise interval types
 gap.filler.rates(f, ba, 20)
 }
+\references{
+Alroy, J 2014. Accurate and precise estimates of origination and extinction rates. Paleobiology 40: 374-397.
+}
 

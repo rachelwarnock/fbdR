@@ -2,7 +2,7 @@
 % Please edit documentation in R/bd.calculations.R
 \name{bd.probability.extant}
 \alias{bd.probability.extant}
-\title{Birth-death probability (Stadler, 2010)}
+\title{Birth-death probability (Stadler, 2012)}
 \usage{
 bd.probability.extant(tree, b, d, rho = 1, mpfr = FALSE, crown = FALSE)
 }
@@ -21,8 +21,8 @@ bd.probability.extant(tree, b, d, rho = 1, mpfr = FALSE, crown = FALSE)
 Log likelihood
 }
 \description{
-Probability of extant species phylogeny conditioned on the origin (Stadler, 2010, eq. 2)
-or the crown (crown = T) (Stadler, 2010, eq. 5)
+Probability of extant species phylogeny conditioned on the origin (Stadler, 2012, eq. 2)
+or the crown (crown = T) (Stadler, 2012, eq. 5)
 }
 \examples{
 # simulate tree
@@ -31,5 +31,8 @@ t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
 birth = 1
 death = 0.1
 bd.probability.extant(t, birth, death)
+}
+\references{
+Stadler, T. 2012. How can we improve accuracy of macroevolutionary rate estimates? Systematic Biology 62: 321-329.
 }
 
