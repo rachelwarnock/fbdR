@@ -14,7 +14,7 @@ uncorrected.rates(fossils, basin.age, strata, continuous = T,
 
 \item{strata}{Number of stratigraphic intervals}
 
-\item{continuous}{If TRUE calculate continuous rates}
+\item{continuous}{If TRUE calculate continuous rates (i.e. account for interval length)}
 
 \item{return.intervals}{If TRUE return per interval estimates}
 }
@@ -36,4 +36,3 @@ f = FossilSim::asymmetric.fossil.mapping(t, f)
 # categorise interval types
 uncorrected.rates(f, ba, 20)
 }
-

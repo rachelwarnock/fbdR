@@ -14,7 +14,7 @@ three.timer.rates(fossils, basin.age, strata, continuous = T,
 
 \item{strata}{Number of stratigraphic intervals}
 
-\item{continuous}{If TRUE calculate continuous rates}
+\item{continuous}{If TRUE calculate continuous rates (i.e. account for interval length)}
 
 \item{return.intervals}{If TRUE return per interval estimates}
 }
@@ -46,4 +46,3 @@ three.timer.rates(f, ba, 20)
 Alroy, J et al. 2008. Dynamics of origination and extinction in the marine fossil record. PNAS 105: 11536-11542. \cr
 Alroy, J 2014. Accurate and precise estimates of origination and extinction rates. Paleobiology 40: 374-397.
 }
-

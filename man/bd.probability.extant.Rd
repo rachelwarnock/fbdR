@@ -35,4 +35,3 @@ bd.probability.extant(t, birth, death)
 \references{
 Stadler, T. 2012. How can we improve accuracy of macroevolutionary rate estimates? Systematic Biology 62: 321-329.
 }
-

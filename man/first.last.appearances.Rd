@@ -23,4 +23,3 @@ f = FossilSim::sim.fossils.poisson(t, 1)
 # work out first & last appearances
 first.last.appearances(f)
 }
-

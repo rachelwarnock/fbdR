@@ -395,7 +395,7 @@ interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic intervals
-#' @param continuous If TRUE calculate continuous rates
+#' @param continuous If TRUE calculate continuous rates (i.e. account for interval length)
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' Note this approach does not return rates for the first interval.
@@ -497,7 +497,7 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic intervals
-#' @param continuous If TRUE calculate continuous rates
+#' @param continuous If TRUE calculate continuous rates (i.e. account for interval length)
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' @examples
@@ -589,7 +589,7 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param fossils Dataframe of sampled fossils (sp = edge labels. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval
 #' @param strata Number of stratigraphic intervals
-#' @param continuous If TRUE calculate continuous rates
+#' @param continuous If TRUE calculate continuous rates (i.e. account for interval length)
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate, overall sampling rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' Note this approach does not return rates for the first interval.
@@ -714,6 +714,7 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @param return.intervals If TRUE return per interval estimates
 #' @return named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 #' Note this approach does not return specation rates for the first or second interval and extinction rate for the first or last interval.
+#' Function accounts for interval length. (i.e. continuous = TRUE is hard coded)
 #'
 #' @references
 #' Alroy, J 2014. Accurate and precise estimates of origination and extinction rates. Paleobiology 40: 374-397.

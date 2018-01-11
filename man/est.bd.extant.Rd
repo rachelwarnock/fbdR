@@ -44,4 +44,3 @@ out$par[1]
 # ML death rate
 out$par[2]
 }
-

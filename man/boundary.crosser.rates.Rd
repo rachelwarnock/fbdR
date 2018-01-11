@@ -14,7 +14,7 @@ boundary.crosser.rates(fossils, basin.age, strata, continuous = T,
 
 \item{strata}{Number of stratigraphic intervals}
 
-\item{continuous}{If TRUE calculate continuous rates}
+\item{continuous}{If TRUE calculate continuous rates (i.e. account for interval length)}
 
 \item{return.intervals}{If TRUE return per interval estimates}
 }
@@ -40,4 +40,3 @@ boundary.crosser.rates(f, ba, 20)
 \references{
 Foote, M. 2000. Origination and extinction components of taxonomic diversity: General problems. Paleobiology 26: 74-102.
 }
-

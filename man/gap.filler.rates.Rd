@@ -18,6 +18,7 @@ gap.filler.rates(fossils, basin.age, strata, return.intervals = F)
 \value{
 named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 Note this approach does not return specation rates for the first or second interval and extinction rate for the first or last interval.
+Function accounts for interval length. (i.e. continuous = TRUE is hard coded)
 }
 \description{
 Calculate speciation and extinction rates using the gap-filler approach
@@ -37,4 +38,3 @@ gap.filler.rates(f, ba, 20)
 \references{
 Alroy, J 2014. Accurate and precise estimates of origination and extinction rates. Paleobiology 40: 374-397.
 }
-
