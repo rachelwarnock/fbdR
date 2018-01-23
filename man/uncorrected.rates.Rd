@@ -33,6 +33,6 @@ f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
 f = FossilSim::add.extant.occ(t, f)
 # asymmetric taxon mapping
 f = FossilSim::asymmetric.fossil.mapping(t, f)
-# categorise interval types
+# calculate speciation and extinction rates
 uncorrected.rates(f, ba, 20)
 }

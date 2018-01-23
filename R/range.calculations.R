@@ -412,7 +412,7 @@ interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #' f = FossilSim::add.extant.occ(t, f)
 #' # asymmetric taxon mapping
 #' f = FossilSim::asymmetric.fossil.mapping(t, f)
-#' # categorise interval types
+#' # calculate speciation and extinction rates
 #' boundary.crosser.rates(f, ba, 20)
 #' @export
 boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
@@ -509,7 +509,7 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
 #' f = FossilSim::add.extant.occ(t, f)
 #' # asymmetric taxon mapping
 #' f = FossilSim::asymmetric.fossil.mapping(t, f)
-#' # categorise interval types
+#' # calculate speciation and extinction rates
 #' uncorrected.rates(f, ba, 20)
 #' @export
 uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
@@ -607,7 +607,7 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' f = FossilSim::add.extant.occ(t, f)
 #' # asymmetric taxon mapping
 #' f = FossilSim::asymmetric.fossil.mapping(t, f)
-#' # categorise interval types
+#' # calculate speciation and extinction rates
 #' three.timer.rates(f, ba, 20)
 #' @export
 three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
@@ -728,7 +728,7 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' f = FossilSim::add.extant.occ(t, f)
 #' # asymmetric taxon mapping
 #' f = FossilSim::asymmetric.fossil.mapping(t, f)
-#' # categorise interval types
+#' # calculate speciation and extinction rates
 #' gap.filler.rates(f, ba, 20)
 #' @export
 gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
