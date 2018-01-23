@@ -38,3 +38,4 @@ bd.probability.range(frs, birth, death)
 \references{
 Keiding, N. 1975. Maximum likelihood estimation in the birth-death process. Annals of Statistics 3: 363-372.
 }
+

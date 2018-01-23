@@ -45,3 +45,4 @@ interval.types.bc.pa(pa, stages)
 \references{
 Foote, M. 2000. Origination and extinction components of taxonomic diversity: General problems. Paleobiology 26: 74-102.
 }
+

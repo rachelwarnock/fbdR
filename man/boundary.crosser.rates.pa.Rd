@@ -31,11 +31,15 @@ Note this approach does not return rates for the first interval.
 Calculate speciation and extinction rates using the boundary crosser approach
 }
 \examples{
+
+# option 1: generate simulated data
+
 set.seed(111)
+
 # simulate tree
 birth = 0.02
 death = 0.01
-tips = 500
+tips = 400
 t = TreeSim::sim.bd.taxa(tips, 1, birth, death)[[1]]
 
 # simulate fossils
@@ -44,11 +48,14 @@ f = FossilSim::sim.fossils.poisson(t, 1)
 # add extant occurrences
 f = FossilSim::add.extant.occ(t, f)
 
-# asymmetric species assignment (this may take a while)
+# asymmetric species assignment (this may take a while esp. for large trees)
 f = FossilSim::asymmetric.fossil.mapping(t, f)
 
 # generate presence.absence matrix
 pa = presence.absence.matrix(f, stages)
+
+# option 2: load precooked presence absence matrix
+pa = presence.absence.precooked
 
 # calculate speciation & extinction rates
 out = boundary.crosser.rates.pa(pa, stages)
@@ -58,13 +65,12 @@ mean(out$p, na.rm = TRUE)
 mean(out$q, na.rm = TRUE)
 
 # plot the output
-max = length(stages$name)
+snum = length(stages$name)
+plot(1:snum, out$p, pch = 16, bty = "n", xlab = "stage #", ylab = "speciation")
+lines(1:snum, rep(birth, snum), lty = 2, lwd = "2", col = 2)
 
-plot(1:max, out$p, pch = 16, bty = "n", xlab = "stage #", ylab = "speciation")
-lines(1:max, rep(0.02, max), lty = 2, lwd = "2", col = 2)
-
-plot(1:max, out$p, pch = 16, bty = "n", xlab = "stage #", ylab = "extinction")
-lines(1:max, rep(0.02, max), lty = 2, lwd = "2", col = "deepskyblue")
+plot(1:snum, out$q, pch = 16, bty = "n", xlab = "stage #", ylab = "extinction")
+lines(1:snum, rep(death, snum), lty = 2, lwd = "2", col = "deepskyblue")
 
 }
 \references{
@@ -73,3 +79,4 @@ Foote, M. 2000. Origination and extinction components of taxonomic diversity: Ge
 \seealso{
 \code{\link{interval.types.bc.pa}}
 }
+

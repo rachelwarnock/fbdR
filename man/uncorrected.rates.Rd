@@ -36,3 +36,4 @@ f = FossilSim::asymmetric.fossil.mapping(t, f)
 # calculate speciation and extinction rates
 uncorrected.rates(f, ba, 20)
 }
+

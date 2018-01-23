@@ -220,11 +220,15 @@ interval.types.bc.pa<-function(presence.absence, intervals){
 #' @seealso \code{\link{interval.types.bc.pa}}
 #'
 #' @examples
+#'
+#' # option 1: generate simulated data
+#'
 #' set.seed(111)
+#'
 #' # simulate tree
 #' birth = 0.02
 #' death = 0.01
-#' tips = 500
+#' tips = 400
 #' t = TreeSim::sim.bd.taxa(tips, 1, birth, death)[[1]]
 #'
 #' # simulate fossils
@@ -233,11 +237,14 @@ interval.types.bc.pa<-function(presence.absence, intervals){
 #' # add extant occurrences
 #' f = FossilSim::add.extant.occ(t, f)
 #'
-#' # asymmetric species assignment (this may take a while)
+#' # asymmetric species assignment (this may take a while esp. for large trees)
 #' f = FossilSim::asymmetric.fossil.mapping(t, f)
 #'
 #' # generate presence.absence matrix
 #' pa = presence.absence.matrix(f, stages)
+#'
+#' # option 2: load precooked presence absence matrix
+#' pa = presence.absence.precooked
 #'
 #' # calculate speciation & extinction rates
 #' out = boundary.crosser.rates.pa(pa, stages)
@@ -247,13 +254,12 @@ interval.types.bc.pa<-function(presence.absence, intervals){
 #' mean(out$q, na.rm = TRUE)
 #'
 #' # plot the output
-#' max = length(stages$name)
+#' snum = length(stages$name)
+#' plot(1:snum, out$p, pch = 16, bty = "n", xlab = "stage #", ylab = "speciation")
+#' lines(1:snum, rep(birth, snum), lty = 2, lwd = "2", col = 2)
 #'
-#' plot(1:max, out$p, pch = 16, bty = "n", xlab = "stage #", ylab = "speciation")
-#' lines(1:max, rep(0.02, max), lty = 2, lwd = "2", col = 2)
-#'
-#' plot(1:max, out$p, pch = 16, bty = "n", xlab = "stage #", ylab = "extinction")
-#' lines(1:max, rep(0.02, max), lty = 2, lwd = "2", col = "deepskyblue")
+#' plot(1:snum, out$q, pch = 16, bty = "n", xlab = "stage #", ylab = "extinction")
+#' lines(1:snum, rep(death, snum), lty = 2, lwd = "2", col = "deepskyblue")
 #'
 #' @export
 boundary.crosser.rates.pa<-function(presence.absence, intervals, continuous = TRUE) {
@@ -343,14 +349,9 @@ boundary.crosser.rates.pa<-function(presence.absence, intervals, continuous = TR
   #eof
 }
 
-#TODO commit changes
-#TODO check everything works on other comp
 #TODO do a test with rate variation across intervals
 #TODO set up a massive tree rep on euler
 #TODO message Alex
-
-#one issue with the current set up is I'm getting a spike in extinction during the second to last interval (i.e. the Messinian).
-#(at least the spike is visible with the simulated data, I don't know what it would be like with the empirical data. It might be worse with the simulated data due to the way I've simulated the trees)
 
 #END
 
