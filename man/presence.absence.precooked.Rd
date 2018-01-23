@@ -12,4 +12,3 @@ presence.absence.precooked
 A table indicating the presence/absence of taxa during different Phanerozoic stages.
 }
 \keyword{datasets}
-

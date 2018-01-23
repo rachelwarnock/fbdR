@@ -33,4 +33,3 @@ pa = presence.absence.matrix(f, stages)
 fa = first.last.appearances.pa(pa)
 
 }
-

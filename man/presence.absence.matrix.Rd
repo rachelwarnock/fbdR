@@ -32,4 +32,3 @@ f = FossilSim::asymmetric.fossil.mapping(t, f)
 presence.absence.matrix(f, stages)
 
 }
-

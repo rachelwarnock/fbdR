@@ -40,4 +40,3 @@ boundary.crosser.rates(f, ba, 20)
 \references{
 Foote, M. 2000. Origination and extinction components of taxonomic diversity: General problems. Paleobiology 26: 74-102.
 }
-

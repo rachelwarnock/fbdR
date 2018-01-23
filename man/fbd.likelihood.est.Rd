@@ -56,4 +56,3 @@ frs = recount.gamma(frs)
 # estimate
 fbd.likelihood.est(birth, death, psi, k, frs)
 }
-

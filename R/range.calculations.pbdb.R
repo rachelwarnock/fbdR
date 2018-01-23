@@ -349,6 +349,7 @@ boundary.crosser.rates.pa<-function(presence.absence, intervals, continuous = TR
   #eof
 }
 
+#TODO double check Al's file
 #TODO do a test with rate variation across intervals
 #TODO set up a massive tree rep on euler
 #TODO message Alex

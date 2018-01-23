@@ -79,4 +79,3 @@ Foote, M. 2000. Origination and extinction components of taxonomic diversity: Ge
 \seealso{
 \code{\link{interval.types.bc.pa}}
 }
-
