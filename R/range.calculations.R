@@ -19,7 +19,7 @@ first.last.appearances<-function(fossils) {
     a = i
 
     # identify fossils
-    f.row=which(fossils[,2]==a)
+    f.row=which(fossils$sp==a)
     occs=c()
     if(length(f.row) > 0){
       occs=c(occs,fossils$h[f.row])
