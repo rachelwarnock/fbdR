@@ -7,6 +7,7 @@
 #' @param b Rate of speciation
 #' @param d Rate of extinction
 #' @param crown If TRUE assume the process begins at the first speciation event and not the origin (default = FALSE)
+#' @param tol rounding-error tolerance for extant taxa
 #' @return Log likelihood
 #'
 #' @references
@@ -26,13 +27,15 @@
 #' death = 0.1
 #' bd.probability.range(frs, birth, death)
 #' @export
-bd.probability.range<-function(frs,b,d,crown=FALSE){
+bd.probability.range<-function(frs,b,d,crown=FALSE,tol=NULL){
 
   frs$edge = NULL
   frs$edge.start = NULL
   frs$edge.end = NULL
 
   frs = unique(frs)
+
+  if(is.null(tol)) tol = min((min(frs$start - frs$end)/100),1e-8)
 
   B = 0 # total number of speciation events # int
   D = 0 # total number of extinction events # int
@@ -44,7 +47,8 @@ bd.probability.range<-function(frs,b,d,crown=FALSE){
   else
     B = length(frs$sp)-1 # note the origin is not a speciation event
 
-  D = length(which(frs$end!=0))
+  #D = length(which(frs$end!=0))
+  D = length(which(frs$end > tol))
   S = sum(frs$start-frs$end)
 
   # also see Silvestro et al. 2014, eq. 9
