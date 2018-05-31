@@ -4,7 +4,7 @@
 \alias{bd.probability.range}
 \title{Birth-death probability (Keiding, 1975)}
 \usage{
-bd.probability.range(frs, b, d, crown = FALSE)
+bd.probability.range(frs, b, d, crown = FALSE, tol = NULL)
 }
 \arguments{
 \item{frs}{Dataframe of species ranges}
@@ -14,6 +14,8 @@ bd.probability.range(frs, b, d, crown = FALSE)
 \item{d}{Rate of extinction}
 
 \item{crown}{If TRUE assume the process begins at the first speciation event and not the origin (default = FALSE)}
+
+\item{tol}{rounding-error tolerance for extant taxa}
 }
 \value{
 Log likelihood
