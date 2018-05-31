@@ -27,15 +27,18 @@
 #' bd.probability.range(frs, birth, death)
 #' @export
 bd.probability.range<-function(frs,b,d,crown=FALSE){
-  frs<-frs
-  b<-b
-  d<-d
-  crown<-crown # condition on the crown, instead of the origin
+
+  frs$edge = NULL
+  frs$edge.start = NULL
+  frs$edge.end = NULL
+
+  frs = unique(frs)
 
   B = 0 # total number of speciation events # int
   D = 0 # total number of extinction events # int
   S = 0 # total lineage duration
 
+  # condition on the crown, instead of the origin
   if(crown)
     B = length(frs$sp)
   else
