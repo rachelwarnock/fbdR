@@ -29,11 +29,12 @@
 #' @export
 bd.probability.range<-function(frs,b,d,crown=FALSE,tol=NULL){
 
-  frs$edge = NULL
-  frs$edge.start = NULL
-  frs$edge.end = NULL
+  tmp = frs
+  sp = unique(tmp$sp)
+  frs = data.frame(sp = sp)
 
-  frs = unique(frs)
+  frs$start = sapply(sp, function(x) { max(tmp$start[which(tmp$sp == x)]) })
+  frs$end = sapply(sp, function(x) { min(tmp$end[which(tmp$sp == x)]) })
 
   if(is.null(tol)) tol = min((min(frs$start - frs$end)/100),1e-8)
 
@@ -47,7 +48,6 @@ bd.probability.range<-function(frs,b,d,crown=FALSE,tol=NULL){
   else
     B = length(frs$sp)-1 # note the origin is not a speciation event
 
-  #D = length(which(frs$end!=0))
   D = length(which(frs$end > tol))
   S = sum(frs$start-frs$end)
 
@@ -90,12 +90,49 @@ bd.probability.extant<-function(tree,b,d,rho=1,mpfr=FALSE,crown=FALSE){
     rho<<-mpfr(rho, bits)
   }
   else{
-    lambda<<-b
-    mu<<-d
-    rho<<-rho
+    lambda = b
+    mu = d
+    rho = rho
   }
-  rho<-rho
-  crown<-crown
+  crown = crown
+
+  # bdP1 function Stadler 2010, 322
+  bdP1<-function(t){
+    t<-t
+
+    p1 = rho * (lambda - mu)^2 * exp(-(lambda-mu)*t)
+    p2 = p1 / (((rho * lambda) + (((lambda * (1 - rho)) - mu) * exp(-(lambda-mu)*t)))^2)
+
+    return(p2)
+  }
+
+  bdP1Log<-function(t){
+    t<-t
+
+    p1 = log(rho) + (2 * log(lambda - mu) ) + (-(lambda-mu)*t)
+
+    p2 = p1 - (2 * log((rho * lambda) + (((lambda * (1 - rho)) - mu) * exp(-(lambda-mu)*t))) )
+
+    return(p2)
+  }
+
+  # bdP0 function Stadler 2010, 322 or Phat in Heath et al. 2014
+  bdP0<-function(t){
+    t<-t
+
+    p = 1 - ( (rho * (lambda-mu)) / ((rho * lambda) + ((lambda*(1-rho)-mu)*exp(-(lambda-mu)*t)) ) )
+
+    return(p)
+  }
+
+  # this doesn't work if 1-(b-d) < 0
+  bdP0Log<-function(t){
+    t<-t
+
+    p = log(1 - (rho * (lambda-mu)) ) - log( ((rho * lambda) + ((lambda*(1-rho)-mu)*exp(-(lambda-mu)*t)) ) )
+
+    return(p)
+  }
 
   tree<-geiger::drop.extinct(tree)
 
@@ -128,41 +165,4 @@ bd.probability.extant<-function(tree,b,d,rho=1,mpfr=FALSE,crown=FALSE){
   return(ll)
 }
 
-# bdP1 function Stadler 2010, 322
-bdP1<-function(t){
-  t<-t
-
-  p1 = rho * (lambda - mu)^2 * exp(-(lambda-mu)*t)
-  p2 = p1 / (((rho * lambda) + (((lambda * (1 - rho)) - mu) * exp(-(lambda-mu)*t)))^2)
-
-  return(p2)
-}
-
-bdP1Log<-function(t){
-  t<-t
-
-  p1 = log(rho) + (2 * log(lambda - mu) ) + (-(lambda-mu)*t)
-
-  p2 = p1 - (2 * log((rho * lambda) + (((lambda * (1 - rho)) - mu) * exp(-(lambda-mu)*t))) )
-
-  return(p2)
-}
-
-# bdP0 function Stadler 2010, 322 or Phat in Heath et al. 2014
-bdP0<-function(t){
-  t<-t
-
-  p = 1 - ( (rho * (lambda-mu)) / ((rho * lambda) + ((lambda*(1-rho)-mu)*exp(-(lambda-mu)*t)) ) )
-
-  return(p)
-}
-
-# this doesn't work if 1-(b-d) < 0
-bdP0Log<-function(t){
-  t<-t
-
-  p = log(1 - (rho * (lambda-mu)) ) - log( ((rho * lambda) + ((lambda*(1-rho)-mu)*exp(-(lambda-mu)*t)) ) )
-
-  return(p)
-}
 
