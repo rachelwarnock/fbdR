@@ -37,5 +37,33 @@ The latest version can be installed in R using the package devtools:
     install_github("rachelwarnock/fbdr")
 
 `fbdR` was designed to work with output from the simulation packages `TreeSim` and `FossilSim` but can be used to estiamte diversification rates using any simulated or empirical data, so long as they match the input format.
+
+### Quick start
+
+	# TreeSim is available on CRAN
+    install.packages("TreeSim")
+	 
+    # FossilSim is available on GitHub
+    devtools::install_github("rachelwarnock/fossilsim", ref="format_changes")
+    
+    # random number seed
+    set.seed(123)
+
+    # simulate a tree conditioned on tip number
+    lambda = 0.5
+    mu = 0.25
+    tips = 200
+    t = TreeSim::sim.bd.taxa(tips,1,lambda,mu)[[1]]
+    
+    # simulate stratigraphic ranges assumming all speciation occurrs via budding
+    beta = 0
+    s = FossilSim::sim.taxonomy(t, beta)
+    
+    # Estimate speciation and extinction using maximum likelihood 
+    out = fbdR::est.bd.combined(t, s)
+    out$par[1] # tree based lambda
+    out$par[2] # tree based mu
+    out$par[3] # fossil based lambda
+    out$par[4] # fossil based mu
     
 ### For further information and examples see the package documentation
