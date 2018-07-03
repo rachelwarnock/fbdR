@@ -44,7 +44,7 @@ The latest version can be installed in R using the package devtools:
     install.packages("TreeSim")
 	 
     # FossilSim is available on GitHub
-    devtools::install_github("rachelwarnock/fossilsim", ref="format_changes")
+    devtools::install_github("rachelwarnock/fossilsim")
     
     # random number seed
     set.seed(123)
