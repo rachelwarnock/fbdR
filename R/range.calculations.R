@@ -22,7 +22,7 @@ first.last.appearances<-function(fossils) {
     f.row=which(fossils$sp==a)
     occs=c()
     if(length(f.row) > 0){
-      occs=c(occs,fossils$h[f.row])
+      occs=c(occs,fossils$hmax[f.row])
     }
 
     # find the oldest and youngest occurrences
@@ -197,7 +197,7 @@ interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
     for(l in lineages){ # 2
 
       # bins in which lineage l occurrs
-      i=fossils[which(fossils$sp==l),]$h
+      i=fossils[which(fossils$sp==l),]$hmax
 
       # do I exist in the bin?
       if(any(i==as.character(h))){
@@ -319,7 +319,7 @@ interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
     for(l in lineages){ # 2
 
       # bins in which lineage l occurrs
-      i=fossils[which(fossils$sp==l),]$h
+      i=fossils[which(fossils$sp==l),]$hmax
 
       # do I exist in the bin?
       if(any(i==as.character(h))){
