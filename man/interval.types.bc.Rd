@@ -30,15 +30,16 @@ NFl - species originates and becomes extinct during the same interval \cr
 }
 \examples{
 # simulate tree & fossils
-t = ape::rtree(10)
-ba = FossilSim::basin.age(t)
-f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+t = ape::rtree(20)
+# budding speciation
+sp = FossilSim::sim.taxonomy(t)
+# simulate fossils
+max = FossilSim::tree.max(t)
+f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 # add extant occurrences
-f = FossilSim::add.extant.occ(t, f)
-# asymmetric taxon mapping
-f = FossilSim::asymmetric.fossil.mapping(t, f)
+f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 # categorise interval types
-interval.types.bc(f, ba, 10)
+interval.types.bc(f, max, 10)
 }
 \references{
 Foote, M. 2000. Origination and extinction components of taxonomic diversity: General problems. Paleobiology 26: 74-102.

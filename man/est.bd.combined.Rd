@@ -45,12 +45,10 @@ independently (\code{constrained = FALSE}) or constraining the parameters under 
 \examples{
 # simulate tree & assume complete sampling
 t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
-# add symmetric speciation events & generate fossil range dataframe
+# simulated mixed speciation
 beta = 0.5
-ages <- FossilSim::mixed.ages(t, beta, root.edge = TRUE)
-# add anagenic speciation events
 lambda.a = 0.1
-frs <- FossilSim::anagenic.species(ages, lambda.a)
+frs <- FossilSim::sim.taxonomy(tree = t, beta = beta, lambda.a = 0.1)
 
 # estimate birth & death rates
 

@@ -19,7 +19,7 @@ Work out first and last appearances
 # simulate tree
 t = ape::rtree(10)
 # simulate fossils
-f = FossilSim::sim.fossils.poisson(t, 1)
+f = FossilSim::sim.fossils.poisson(1, t)
 # work out first & last appearances
 first.last.appearances(f)
 }

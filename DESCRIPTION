@@ -13,3 +13,4 @@ Imports:
     coda,
     TreeSim
 RoxygenNote: 6.0.1
+Suggests: testthat

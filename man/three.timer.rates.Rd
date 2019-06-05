@@ -33,14 +33,15 @@ The per-interval extinction rate mu = log(2ti/3t) + log(Ps) \cr
 \examples{
 # simulate tree & fossils
 t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
-ba = FossilSim::basin.age(t)
-f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+# budding speciation
+sp = FossilSim::sim.taxonomy(t)
+# simulate fossils
+max = FossilSim::tree.max(t)
+f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 # add extant occurrences
-f = FossilSim::add.extant.occ(t, f)
-# asymmetric taxon mapping
-f = FossilSim::asymmetric.fossil.mapping(t, f)
+f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 # calculate speciation and extinction rates
-three.timer.rates(f, ba, 20)
+three.timer.rates(f, max, 10)
 }
 \references{
 Alroy, J et al. 2008. Dynamics of origination and extinction in the marine fossil record. PNAS 105: 11536-11542. \cr

@@ -33,12 +33,9 @@ This function maximises the likelihood of the function bd.probability.range usin
 \examples{
 # simulate tree & assume complete sampling
 t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
-# add symmetric speciation events & generate fossil range dataframe
-f = 0.5
-ages <- FossilSim::mixed.ages(t, f, root.edge = TRUE)
-# add anagenic speciation events
+beta = 0.5
 lambda.a = 0.1
-frs <- FossilSim::anagenic.species(ages, lambda.a)
+frs <- FossilSim::sim.taxonomy(tree = t, beta = beta, lambda.a = 0.1)
 # estimate birth & death rates
 birth = runif(1)
 death = runif(1)

@@ -16,7 +16,7 @@ recount.gamma<-function(frs){
       bj=frs$bi[j]
       dj=frs$di[j]
 
-      if(bj > bf & dj < bf)
+      if( (bj > bf) & (dj < bf) )
         g=g+1
     }
     if(bf==ot)
@@ -68,14 +68,12 @@ recount.extant<-function(frs){
 #' death = 0.1
 #' t = TreeSim::sim.bd.taxa(100, 1, birth, death)[[1]]
 #' psi = 1
-#' f = FossilSim::sim.fossils.poisson(t, psi)
-#' k = length(f$h)
+#' f = FossilSim::sim.fossils.poisson(tree = t, psi)
+#' k = length(f$sp)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, t)
 #' # calculate range attachment times given incomplete sampling
-#' frs = FossilSim::attachment.times(t,f)
+#' frs = attachment.times(t, f)
 #' # rename range data headers
 #' names(frs)[2]<-"bi"
 #' names(frs)[3]<-"di"

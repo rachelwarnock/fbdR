@@ -10,11 +10,12 @@
 #' # simulate tree
 #' t = TreeSim::sim.bd.taxa(100,1,0.01,0.005)[[1]]
 #'
-#' # simulate fossils
-#' f = FossilSim::sim.fossils.poisson(t, 1)
+#' # simulate species
+#' sp = FossilSim::sim.taxonomy(t)
 #'
-#' # asymmetric species assignment
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # simulate fossils
+#' f = FossilSim::sim.fossils.poisson(1, taxonomy = sp)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #'
 #' # generate presence.absence matrix
 #' presence.absence.matrix(f, stages)
@@ -27,7 +28,7 @@ presence.absence.matrix<-function(fossils, intervals, add.extant = TRUE){
 
   for(i in unique(fossils$sp)){
 
-    h = fossils$h[which(fossils$sp == i)]
+    h = fossils$hmin[which(fossils$sp == i)]
 
     s = c(i)
 
@@ -61,11 +62,12 @@ presence.absence.matrix<-function(fossils, intervals, add.extant = TRUE){
 #' # simulate tree
 #' t = TreeSim::sim.bd.taxa(100,1,0.01,0.005)[[1]]
 #'
-#' # simulate fossils
-#' f = FossilSim::sim.fossils.poisson(t, 1)
+#' # simulate species
+#' sp = FossilSim::sim.taxonomy(t)
 #'
-#' # asymmetric species assignment
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # simulate fossils
+#' f = FossilSim::sim.fossils.poisson(1, taxonomy = sp)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #'
 #' # generate presence.absence matrix
 #' pa = presence.absence.matrix(f, stages)
@@ -118,11 +120,12 @@ first.last.appearances.pa<-function(presence.absence){
 #' # simulate tree
 #' t = TreeSim::sim.bd.taxa(100,1,0.01,0.005)[[1]]
 #'
-#' # simulate fossils
-#' f = FossilSim::sim.fossils.poisson(t, 1)
+#' # simulate species
+#' sp = FossilSim::sim.taxonomy(t)
 #'
-#' # asymmetric species assignment
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' # simulate fossils
+#' f = FossilSim::sim.fossils.poisson(1, taxonomy = sp)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #'
 #' # generate presence.absence matrix
 #' pa = presence.absence.matrix(f, stages)
@@ -231,14 +234,12 @@ interval.types.bc.pa<-function(presence.absence, intervals){
 #' tips = 400
 #' t = TreeSim::sim.bd.taxa(tips, 1, birth, death)[[1]]
 #'
+#' # simulate species (this may take a while esp. for large trees)
+#' sp = FossilSim::sim.taxonomy(t)
+#'
 #' # simulate fossils
-#' f = FossilSim::sim.fossils.poisson(t, 1)
-#'
-#' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#'
-#' # asymmetric species assignment (this may take a while esp. for large trees)
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.fossils.poisson(1, taxonomy = sp)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #'
 #' # generate presence.absence matrix
 #' pa = presence.absence.matrix(f, stages)
@@ -349,12 +350,4 @@ boundary.crosser.rates.pa<-function(presence.absence, intervals, continuous = TR
   #eof
 }
 
-#TODO double check Al's file
-#TODO do a test with rate variation across intervals
-#TODO set up a massive tree rep on euler
-#TODO message Alex
-
 #END
-
-#TODO add output = proportion of useful taxa
-#TODO make interval order more flexible

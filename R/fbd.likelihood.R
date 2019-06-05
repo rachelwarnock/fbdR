@@ -19,7 +19,7 @@
 #' death = 0.1
 #' t = TreeSim::sim.bd.taxa(100, 1, birth, death)[[1]]
 #' psi = 1
-#' f = FossilSim::sim.fossils.poisson(t, psi)
+#' f = FossilSim::sim.fossils.poisson(psi, t)
 #' k = length(f$h)
 #' # add extant occurrences
 #' f = FossilSim::add.extant.occ(t, f)

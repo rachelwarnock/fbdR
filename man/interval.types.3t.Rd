@@ -33,15 +33,16 @@ n.b. all three timers are also two timers \cr
 }
 \examples{
 # simulate tree & fossils
-t = ape::rtree(10)
-ba = FossilSim::basin.age(t)
-f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+t = ape::rtree(20)
+# budding speciation
+sp = FossilSim::sim.taxonomy(t)
+# simulate fossils
+max = FossilSim::tree.max(t)
+f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 # add extant occurrences
-f = FossilSim::add.extant.occ(t, f)
-# asymmetric taxon mapping
-f = FossilSim::asymmetric.fossil.mapping(t, f)
+f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 # categorise interval types
-interval.types.3t(f, ba, 10)
+interval.types.3t(f, max, 10)
 }
 \references{
 Alroy, J et al. 2008. Dynamics of origination and extinction in the marine fossil record. PNAS 105: 11536-11542.

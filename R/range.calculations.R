@@ -6,7 +6,7 @@
 #' # simulate tree
 #' t = ape::rtree(10)
 #' # simulate fossils
-#' f = FossilSim::sim.fossils.poisson(t, 1)
+#' f = FossilSim::sim.fossils.poisson(1, t)
 #' # work out first & last appearances
 #' first.last.appearances(f)
 #' @export
@@ -58,15 +58,16 @@ first.last.appearances<-function(fossils) {
 #'
 #' @examples
 #' # simulate tree & fossils
-#' t = ape::rtree(10)
-#' ba = FossilSim::basin.age(t)
-#' f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+#' t = ape::rtree(20)
+#' # budding speciation
+#' sp = FossilSim::sim.taxonomy(t)
+#' # simulate fossils
+#' max = FossilSim::tree.max(t)
+#' f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #' # categorise interval types
-#' interval.types.bc(f, ba, 10)
+#' interval.types.bc(f, max, 10)
 #' @export
 interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
@@ -157,15 +158,16 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #'
 #' @examples
 #' # simulate tree & fossils
-#' t = ape::rtree(10)
-#' ba = FossilSim::basin.age(t)
-#' f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+#' t = ape::rtree(20)
+#' # budding speciation
+#' sp = FossilSim::sim.taxonomy(t)
+#' # simulate fossils
+#' max = FossilSim::tree.max(t)
+#' f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #' # categorise interval types
-#' interval.types.3t(f, ba, 10)
+#' interval.types.3t(f, max, 10)
 #' @export
 interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
@@ -275,15 +277,16 @@ interval.types.3t<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #'
 #' @examples
 #' # simulate tree & fossils
-#' t = ape::rtree(10)
-#' ba = FossilSim::basin.age(t)
-#' f = FossilSim::sim.fossils.unif(t, ba, 10, 0.5)
+#' t = ape::rtree(20)
+#' # budding speciation
+#' sp = FossilSim::sim.taxonomy(t)
+#' # simulate fossils
+#' max = FossilSim::tree.max(t)
+#' f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #' # categorise interval types
-#' interval.types.gf(f, ba, 10)
+#' interval.types.gf(f, max, 10)
 #' @export
 interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
   fossils<-fossils
@@ -406,14 +409,15 @@ interval.types.gf<-function(fossils,basin.age,strata,return.useful=FALSE) {
 #' @examples
 #' # simulate tree & fossils
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
-#' ba = FossilSim::basin.age(t)
-#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # budding speciation
+#' sp = FossilSim::sim.taxonomy(t)
+#' # simulate fossils
+#' max = FossilSim::tree.max(t)
+#' f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #' # calculate speciation and extinction rates
-#' boundary.crosser.rates(f, ba, 20)
+#' boundary.crosser.rates(f, max, 10)
 #' @export
 boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -503,14 +507,15 @@ boundary.crosser.rates<-function(fossils,basin.age,strata,continuous=T,return.in
 #' @examples
 #' # simulate tree & fossils
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
-#' ba = FossilSim::basin.age(t)
-#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # budding speciation
+#' sp = FossilSim::sim.taxonomy(t)
+#' # simulate fossils
+#' max = FossilSim::tree.max(t)
+#' f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #' # calculate speciation and extinction rates
-#' uncorrected.rates(f, ba, 20)
+#' uncorrected.rates(f, max, 10)
 #' @export
 uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -601,14 +606,15 @@ uncorrected.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @examples
 #' # simulate tree & fossils
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
-#' ba = FossilSim::basin.age(t)
-#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # budding speciation
+#' sp = FossilSim::sim.taxonomy(t)
+#' # simulate fossils
+#' max = FossilSim::tree.max(t)
+#' f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #' # calculate speciation and extinction rates
-#' three.timer.rates(f, ba, 20)
+#' three.timer.rates(f, max, 10)
 #' @export
 three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.intervals=F) {
   fossils<-fossils
@@ -722,14 +728,15 @@ three.timer.rates<-function(fossils,basin.age,strata,continuous=T,return.interva
 #' @examples
 #' # simulate tree & fossils
 #' t = TreeSim::sim.bd.taxa(100,1,1,0.1)[[1]]
-#' ba = FossilSim::basin.age(t)
-#' f = FossilSim::sim.fossils.unif(t, ba, 20, 0.5)
+#' # budding speciation
+#' sp = FossilSim::sim.taxonomy(t)
+#' # simulate fossils
+#' max = FossilSim::tree.max(t)
+#' f = FossilSim::sim.fossils.intervals(taxonomy = sp, max.age = max, strata = 10, probabilities = rep(0.5,10), use.exact.times = FALSE)
 #' # add extant occurrences
-#' f = FossilSim::add.extant.occ(t, f)
-#' # asymmetric taxon mapping
-#' f = FossilSim::asymmetric.fossil.mapping(t, f)
+#' f = FossilSim::sim.extant.samples(f, taxonomy = sp)
 #' # calculate speciation and extinction rates
-#' gap.filler.rates(f, ba, 20)
+#' gap.filler.rates(f, max, 10)
 #' @export
 gap.filler.rates<-function(fossils,basin.age,strata,return.intervals=F) {
   fossils<-fossils
