@@ -84,8 +84,10 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
   useful.un = c()
   useful.bc = c()
 
+  tol = 1e-8
+
   # during each horizon
-  for(h in as.character(horizons)){ # loop 1
+  for(h in horizons){ # loop 1
 
     NFls=c()
     NFts=c()
@@ -101,10 +103,12 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
       # define NFls (species originate & go extinct)
       # or NFts (top boundary crossers - species orginates)
       # if the first appearance is equivalent to the current horizon:
-      if(fa==h) {
+      #if(fa==h) {
+      if( abs(fa - h) < tol) {
         # and the first appearance is equivalent to the last appearance
         # species is categorised as NFL
-        if(fa==la) {
+        #if(fa==la) {
+        if( abs(fa - la) < tol) {
           NFls=c(NFls,FAs[,1][i])
           useful.un = c(useful.un, id)
         }
@@ -115,7 +119,8 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
         }
       }
       # else define Nbl (bottom boundary crossers - species goes extinct)
-      else if (la==h) {
+      #else if (la==h) {
+      else if ( abs(la - h) < tol) {
         Nbls=c(Nbls,FAs[,1][i])
         useful.bc = c(useful.bc, id)
       }
