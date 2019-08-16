@@ -85,7 +85,7 @@ interval.types.bc<-function(fossils,basin.age,strata,return.useful=FALSE) {
   useful.bc = c()
 
   # during each horizon
-  for(h in horizons){ # loop 1
+  for(h in as.character(horizons)){ # loop 1
 
     NFls=c()
     NFts=c()
