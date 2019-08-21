@@ -632,7 +632,7 @@ three.timer.rates = function(fossils, max.age, strata, continuous = TRUE, return
           # calculate extinction rates
           q.hat=( log(two_t_a/three_t)+log(Ps) )
           q.hat=round(q.hat,3)
-        } else{
+        } else {
           # calculate orgination rates
           p.hat=(( log(two_t_b/three_t)+log(Ps) )/s1 )
           p.hat=round(p.hat,3)
@@ -661,8 +661,8 @@ three.timer.rates = function(fossils, max.age, strata, continuous = TRUE, return
   two_t_b = sum(o.e.rates$two_t_b)
   three_t_b = sum(o.e.rates$three_t)
 
-  two_t_a = sum(o.e.rates$two_t_a)
-  three_t_a = sum(o.e.rates$three_t)
+  two_t_a = sum(o.e.rates$two_t_a[-1])
+  three_t_a = sum(o.e.rates$three_t[-1])
 
   p.total = ifelse(three_t_b > 0, ( log(two_t_b/three_t_b) + log(Ps) ), NaN )
   q.total = ifelse(three_t_a > 0, ( log(two_t_a/three_t_a) + log(Ps) ), NaN )
