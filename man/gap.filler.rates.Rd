@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.tree.wide.R
 \name{gap.filler.rates}
 \alias{gap.filler.rates}
-\title{Calculate speciation and extinction rates using the gap-filler approach}
+\title{Calculate speciation and extinction rates using the gap-filler approach for a set of equal length intervals}
 \usage{
 gap.filler.rates(fossils, max.age, strata, return.intervals = FALSE)
 }
@@ -21,7 +21,9 @@ Note this approach does not return specation rates for the first or second inter
 Function accounts for interval length. (i.e. continuous = TRUE is hard coded)
 }
 \description{
-Calculate speciation and extinction rates using the gap-filler approach
+By default the function returns tree-wide estimates of speciation and extinction rates,
+which are calculated by summing taxon counts across all intervals.
+This approach relies on having equal length intervals.
 }
 \examples{
 # simulate tree & fossils

@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.tree.wide.R
 \name{uncorrected.rates}
 \alias{uncorrected.rates}
-\title{Calculate speciation and extinction rates using the uncorrected approach}
+\title{Calculate speciation and extinction rates using the uncorrected approach for a set of equal length intervals}
 \usage{
 uncorrected.rates(fossils, max.age, strata, continuous = TRUE,
   return.intervals = FALSE)
@@ -22,7 +22,9 @@ uncorrected.rates(fossils, max.age, strata, continuous = TRUE,
 named list with the overall speciation rate, overall extinction rate and a dataframe of per interval estimtes if return.intervals = TRUE.
 }
 \description{
-Calculate speciation and extinction rates using the uncorrected approach
+By default the function returns tree-wide estimates of speciation and extinction rates,
+which are calculated by summing taxon counts across all intervals.
+This approach relies on having equal length intervals.
 }
 \examples{
 # simulate tree & fossils

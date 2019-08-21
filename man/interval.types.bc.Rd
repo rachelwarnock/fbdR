@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.tree.wide.R
 \name{interval.types.bc}
 \alias{interval.types.bc}
-\title{Categorise per interval taxon types using boundary crosser categories}
+\title{Categorise per interval taxon types using boundary crosser categories for a set of equal length intervals}
 \usage{
 interval.types.bc(fossils, max.age, strata, return.useful = FALSE)
 }
@@ -19,7 +19,7 @@ interval.types.bc(fossils, max.age, strata, return.useful = FALSE)
 dataframe of per interval taxon types.
 }
 \description{
-Categorise per interval taxon types using boundary crosser categories
+Categorise per interval taxon types using boundary crosser categories for a set of equal length intervals
 }
 \details{
 Taxa types are detailed in Foote (2000). \cr

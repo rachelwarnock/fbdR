@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.tree.wide.R
 \name{three.timer.rates}
 \alias{three.timer.rates}
-\title{Calculate speciation and extinction rates using the three-timer approach}
+\title{Calculate speciation and extinction rates using the three-timer approach for a set of equal length intervals}
 \usage{
 three.timer.rates(fossils, max.age, strata, continuous = TRUE,
   return.intervals = FALSE)
@@ -23,7 +23,9 @@ named list with the overall speciation rate, overall extinction rate, overall sa
 Note this approach does not return rates for the first interval.
 }
 \description{
-Calculate speciation and extinction rates using the three-timer approach
+By default the function returns tree-wide estimates of speciation and extinction rates,
+which are calculated by summing taxon counts across all intervals.
+This approach relies on having equal length intervals.
 }
 \details{
 The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr

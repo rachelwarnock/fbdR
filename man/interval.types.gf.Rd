@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.tree.wide.R
 \name{interval.types.gf}
 \alias{interval.types.gf}
-\title{Categorise per interval taxon types using the gap-filler approach (Alroy, 2014)}
+\title{Categorise per interval taxon types using the gap-filler approach (Alroy, 2014) for a set of equal length intervals}
 \usage{
 interval.types.gf(fossils, max.age, strata, return.useful = FALSE)
 }
@@ -19,7 +19,7 @@ interval.types.gf(fossils, max.age, strata, return.useful = FALSE)
 dataframe of per interval taxon types.
 }
 \description{
-Categorise per interval taxon types using the gap-filler approach (Alroy, 2014)
+Categorise per interval taxon types using the gap-filler approach (Alroy, 2014) for a set of equal length intervals
 }
 \details{
 Taxa types are detailed in Alroy (2014) \cr

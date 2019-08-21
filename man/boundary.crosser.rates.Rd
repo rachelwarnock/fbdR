@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.tree.wide.R
 \name{boundary.crosser.rates}
 \alias{boundary.crosser.rates}
-\title{Calculate speciation and extinction rates using the boundary crosser approach}
+\title{Calculate speciation and extinction rates using the boundary crosser approach for a set of equal length intervals}
 \usage{
 boundary.crosser.rates(fossils, max.age, strata, continuous = TRUE,
   return.intervals = FALSE)
@@ -23,7 +23,9 @@ named list with the overall speciation rate, overall extinction rate and a dataf
 Note this approach does not return rates for the first interval.
 }
 \description{
-Calculate speciation and extinction rates using the boundary crosser approach
+By default the function returns tree-wide estimates of speciation and extinction rates,
+which are calculated by summing taxon counts across all intervals.
+This approach relies on having equal length intervals.
 }
 \examples{
 # simulate tree & fossils

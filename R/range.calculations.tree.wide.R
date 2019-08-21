@@ -40,7 +40,7 @@ first.last.appearances = function(fossils) {
 
 ## Categorise interval types
 
-#' Categorise per interval taxon types using boundary crosser categories
+#' Categorise per interval taxon types using boundary crosser categories for a set of equal length intervals
 #'
 #' @details
 #' Taxa types are detailed in Foote (2000). \cr
@@ -140,7 +140,7 @@ interval.types.bc = function(fossils, max.age, strata, return.useful = FALSE) {
   #eof
 }
 
-#' Categorise per interval taxon types using the three-timer approach (Alroy, 2008)
+#' Categorise per interval taxon types using the three-timer approach (Alroy, 2008) for a set of equal length intervals
 #'
 #' @details
 #' Taxa types are detailed in Alroy (2008) and Alroy (2014) \cr
@@ -258,7 +258,7 @@ interval.types.3t = function(fossils, max.age, strata, return.useful = FALSE) {
   #eof
 }
 
-#' Categorise per interval taxon types using the gap-filler approach (Alroy, 2014)
+#' Categorise per interval taxon types using the gap-filler approach (Alroy, 2014) for a set of equal length intervals
 #'
 #' @details
 #' Taxa types are detailed in Alroy (2014) \cr
@@ -398,7 +398,11 @@ interval.types.gf = function(fossils, max.age, strata, return.useful = FALSE) {
 
 ## Calculate speciation and extinction rates
 
-#' Calculate speciation and extinction rates using the boundary crosser approach
+#' Calculate speciation and extinction rates using the boundary crosser approach for a set of equal length intervals
+#'
+#' By default the function returns tree-wide estimates of speciation and extinction rates,
+#' which are calculated by summing taxon counts across all intervals.
+#' This approach relies on having equal length intervals.
 #'
 #' @param fossils Dataframe of sampled fossils (sp = unique species ID. h = ages.)
 #' @param max.age Maximum age of the oldest stratigraphic interval
@@ -488,7 +492,11 @@ boundary.crosser.rates = function(fossils, max.age, strata, continuous = TRUE, r
   #eof
 }
 
-#' Calculate speciation and extinction rates using the uncorrected approach
+#' Calculate speciation and extinction rates using the uncorrected approach for a set of equal length intervals
+#'
+#' By default the function returns tree-wide estimates of speciation and extinction rates,
+#' which are calculated by summing taxon counts across all intervals.
+#' This approach relies on having equal length intervals.
 #'
 #' @param fossils Dataframe of sampled fossils (sp = unique species ID. h = ages.)
 #' @param max.age Maximum age of the oldest stratigraphic interval
@@ -564,8 +572,11 @@ uncorrected.rates = function(fossils, max.age, strata, continuous = TRUE, return
   #eof
 }
 
-#' Calculate speciation and extinction rates using the three-timer approach
+#' Calculate speciation and extinction rates using the three-timer approach for a set of equal length intervals
 #'
+#' By default the function returns tree-wide estimates of speciation and extinction rates,
+#' which are calculated by summing taxon counts across all intervals.
+#' This approach relies on having equal length intervals.
 #'
 #' @details
 #' The overall sampling probability Ps = 3t / (3t + Pt), where 3t and Pt are summed across the entire dataset \cr
@@ -685,7 +696,11 @@ three.timer.rates = function(fossils, max.age, strata, continuous = TRUE, return
   # eof
 }
 
-#' Calculate speciation and extinction rates using the gap-filler approach
+#' Calculate speciation and extinction rates using the gap-filler approach for a set of equal length intervals
+#'
+#' By default the function returns tree-wide estimates of speciation and extinction rates,
+#' which are calculated by summing taxon counts across all intervals.
+#' This approach relies on having equal length intervals.
 #'
 #' @param fossils Dataframe of sampled fossils (sp = unique species ID. h = ages.)
 #' @param basin.age Maximum age of the oldest stratigraphic interval

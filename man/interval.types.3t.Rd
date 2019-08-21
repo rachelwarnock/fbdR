@@ -2,7 +2,7 @@
 % Please edit documentation in R/range.calculations.tree.wide.R
 \name{interval.types.3t}
 \alias{interval.types.3t}
-\title{Categorise per interval taxon types using the three-timer approach (Alroy, 2008)}
+\title{Categorise per interval taxon types using the three-timer approach (Alroy, 2008) for a set of equal length intervals}
 \usage{
 interval.types.3t(fossils, max.age, strata, return.useful = FALSE)
 }
@@ -19,7 +19,7 @@ interval.types.3t(fossils, max.age, strata, return.useful = FALSE)
 dataframe of per interval taxon types.
 }
 \description{
-Categorise per interval taxon types using the three-timer approach (Alroy, 2008)
+Categorise per interval taxon types using the three-timer approach (Alroy, 2008) for a set of equal length intervals
 }
 \details{
 Taxa types are detailed in Alroy (2008) and Alroy (2014) \cr
