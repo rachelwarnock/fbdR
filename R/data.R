@@ -5,8 +5,8 @@
 #' @format A data frame with Phanerozoic stage start an end times:
 #' \describe{
 #' \item{stage}{stage name}
-#' \item{start}{start of stage in MA}
-#' \item{end}{end of stage in MA}
+#' \item{start}{start of stage in Ma}
+#' \item{end}{end of stage in Ma}
 #' }
 "stages"
 

@@ -31,14 +31,9 @@
 #' out$par[2]
 #' @export
 est.bd.ranges<-function(b,d,frs,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=10,crown=FALSE){
-  b<-b # starting value
-  d<-d # starting value
-  frs<-frs
-  lower.b<-lower.b
-  lower.d<-lower.d
-  upper.b<-upper.b
-  upper.d<-upper.d
-  crown<-crown
+  # b starting value
+  # d starting value
+
   method =  1 # 1: "Nelder-Mead" 2: "L-BFGS-B"
 
   if(method==2){
@@ -61,8 +56,6 @@ est.bd.ranges<-function(b,d,frs,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=1
 bd.likelihood.est.ranges<-function(p,frs,crown=FALSE){
   b=abs(p[1])
   d=abs(p[2])
-  frs<-frs
-  crown<-crown
 
   lk=bd.probability.range(frs,b,d,crown=crown)
   return(lk)
@@ -98,15 +91,9 @@ bd.likelihood.est.ranges<-function(p,frs,crown=FALSE){
 #' out$par[2]
 #' @export
 est.bd.extant<-function(b,d,tree,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=10,crown=FALSE,rho=1){
-  b<-b # starting value
-  d<-d # starting value
-  tree<-tree
-  lower.b<-lower.b
-  lower.d<-lower.d
-  upper.b<-upper.b
-  upper.d<-upper.d
-  crown<-crown
-  rho<-rho
+  # b # starting value
+  # d # starting value
+
   method =  1 # 1: "Nelder-Mead" 2: "L-BFGS-B"
 
   if(method==2){
@@ -129,9 +116,6 @@ est.bd.extant<-function(b,d,tree,lower.b=0.001,upper.b=10,lower.d=0.001,upper.d=
 bd.likelihood.est.extant<-function(p,tree,crown=FALSE,rho=1){
   b=abs(p[1])
   d=abs(p[2])
-  tree<-tree
-  crown<-crown
-  rho<-rho
 
   if((b < d) || (b == d))
    return(-10^100)
@@ -144,10 +128,6 @@ bd.likelihood.est.extant<-function(p,tree,crown=FALSE,rho=1){
 ######## phylogenetic estimates constrained
 
 est.bd.extant.constr<-function(nd,tree,crown=FALSE,rho=1){
-  nd<-nd # fixed value
-  tree<-tree
-  crown<-crown
-  rho<-rho
 
   # use optimize for one-dimensional optimization
   est<-optimize(bd.likelihood.est.extant.constr,tree=tree,nd=nd,crown=crown,rho=rho,c(0,1000),maximum = TRUE)
@@ -160,10 +140,6 @@ est.bd.extant.constr<-function(nd,tree,crown=FALSE,rho=1){
 
 bd.likelihood.est.extant.constr<-function(b,tree,nd,crown=FALSE,rho=1){
   b<-abs(b)
-  tree<-tree
-  nd<-nd
-  crown<-crown
-  rho<-rho
 
   if(nd >= b)
     return(-10^100)
@@ -238,13 +214,11 @@ bd.likelihood.est.extant.constr<-function(b,tree,nd,crown=FALSE,rho=1){
 #' out$par[4]
 #' @export
 est.bd.combined<-function(tree,frs,b=0.3,d=0.1,b.star=1,d.star=0.1,nd=0.1,constrained=FALSE,constrained.p=3,crown=FALSE,rho=1){
-  b<-b # starting value
-  d<-d # starting value
-  b.star<-b.star # starting value
-  d.star<-d.star # starting value
-  nd<-nd # starting value
-  crown<-crown
-  rho<-rho
+  # b # starting value
+  # d # starting value
+  # b.star # starting value
+  # d.star # starting value
+  # nd # starting value
 
   if(!constrained)
     est<-optim(c(b,d,b.star,d.star),bd.likelihood.est.combined,tree=tree,frs=frs,crown=crown,rho=rho,control=list(fnscale=-1,maxit=1000)) # fnscale=-1 tells the function to maximise
@@ -265,10 +239,6 @@ bd.likelihood.est.combined<-function(p,tree,frs,crown=FALSE,rho=1){
   d=abs(p[2])
   b.star=abs(p[3])
   d.star=abs(p[4])
-  tree<-tree
-  frs<-frs
-  crown<-crown
-  rho<-rho
 
   if((b < d) || (b == d))
     return(-10^100)
@@ -283,10 +253,6 @@ bd.likelihood.est.combined.const<-function(p,tree,frs,crown=FALSE,rho=1){
   b=abs(p[1])
   b.star=abs(p[2])
   nd=abs(p[3])
-  tree<-tree
-  frs<-frs
-  crown<-crown
-  rho<-rho
 
   if(b > b.star)
     return(-10^100)
@@ -306,10 +272,6 @@ bd.likelihood.est.combined.const<-function(p,tree,frs,crown=FALSE,rho=1){
 bd.likelihood.est.combined.const.simple<-function(p,tree,frs,crown=FALSE,rho=1){
   b=abs(p[1])
   d=abs(p[2])
-  tree<-tree
-  frs<-frs
-  crown<-crown
-  rho<-rho
 
   if(b < d)
     return(-10^100)

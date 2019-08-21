@@ -3,8 +3,6 @@
 #' @export
 #' @rdname fbd.probability
 recount.gamma<-function(frs){
-  #frs<-fossilRanges
-  frs<-frs
 
   ot=max(frs$bi)
 
@@ -33,8 +31,6 @@ recount.gamma<-function(frs){
 #' @export
 #' @rdname fbd.probability
 recount.extant<-function(frs){
-  #frs<-fossilRanges
-  frs<-frs
 
   for(f in 1:length(frs$bi)){
     df=frs$di[f]
@@ -83,10 +79,7 @@ recount.extant<-function(frs){
 #' fbd.probability(frs, birth, death, psi, k)
 #' @export
 fbd.probability<-function(frs,b,d,s,k,rho=1,complete=F,mpfr=F){
-  frs<-frs
-  numFossils<-k
-  complete<-complete
-  mpfr<-mpfr
+
   bits = 128
   if(mpfr){
     lambda<<-mpfr(b, bits)
@@ -163,7 +156,6 @@ fbdC4fxn<-function(){
 }
 
 fbdPfxn<-function(t){
-  t<-t
 
   c1 = fbdC1fxn()
   c2 = fbdC2fxn()
@@ -175,7 +167,6 @@ fbdPfxn<-function(t){
 
 # rho = 1
 fbdQTildaFxnLog<-function(t){
-  t<-t
 
   c1 = fbdC1fxn()
   c2 = fbdC2fxn()
@@ -194,7 +185,6 @@ fbdQTildaFxnLog<-function(t){
 }
 
 fbdQfxnLog<-function(t){
-  t<-t
 
   c1 = fbdC1fxn()
   c2 = fbdC2fxn()
@@ -208,9 +198,6 @@ fbdQfxnLog<-function(t){
 }
 
 rangePrComplete<-function(gamma,bi,di){
-  bi<-bi
-  di<-di
-  gamma<-gamma
 
   rp = log(lambda*gamma) + fbdQTildaFxnLog(bi) - fbdQTildaFxnLog(di)
 
@@ -219,10 +206,6 @@ rangePrComplete<-function(gamma,bi,di){
 }
 
 rangePr<-function(gamma,bi,di,oi){
-  bi<-bi
-  di<-di
-  oi<-oi
-  gamma<-gamma
 
   rp = log(lambda*gamma) + fbdQTildaFxnLog(oi) - fbdQTildaFxnLog(di) + fbdQfxnLog(bi) - fbdQfxnLog(oi)
 
@@ -231,7 +214,6 @@ rangePr<-function(gamma,bi,di,oi){
 }
 
 qt_heath<-function(t){
-  t<-t
 
   c1=fbdC1fxn()
   c2=fbdC2fxn()
